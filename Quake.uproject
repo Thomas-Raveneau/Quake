@@ -1,0 +1,16 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{590FF920-4486-4BA4-8E90-77BA7915E70E}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "Quake",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}
