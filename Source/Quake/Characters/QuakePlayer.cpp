@@ -58,6 +58,3 @@ void AQuakePlayer::LookUp(float Value)
 {
 	AddControllerPitchInput(Value);
 }
-
-
-
