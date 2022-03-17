@@ -2,7 +2,12 @@
 
 #pragma once
 
+#include <algorithm>
+
+#include "../Weapons/Weapon.h"
+
 #include "CoreMinimal.h"
+#include "Net/UnrealNetwork.h"
 #include "GameFramework/Character.h"
 #include "QuakePlayer.generated.h"
 
@@ -26,8 +31,39 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual void GetLifetimeReplicatedProps( TArray< FLifetimeProperty > & OutLifetimeProps ) const override;
+
+public:
+	// Player health properties
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
+	int Health = 100;
+	const int MaxHealth = 200;
+
+	// Player shield properties
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
+	int Shield = 0;
+	const int MaxShield = 200;
+	
+	// Player first and third person weapons
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Weapon")
+	AWeapon *WeaponFP;
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Weapon")
+	AWeapon *WeaponTP;
+
 private:
-	// INPUTS FUNCTIONS
+	// Health management functions
+	UFUNCTION(BlueprintCallable, Category="Stats")
+	void AddHealth(int amount);
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+	void SubstractHealth(int amount);
+
+	// Shield management functions
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+	void AddShield(int amount);
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+	void SubstractShield(int amount);
+
+	// Inputs function
 	UFUNCTION()
 	void MoveForward(float Value);
 	UFUNCTION()
