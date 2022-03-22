@@ -15,8 +15,13 @@ ABonus::ABonus()
 void ABonus::Activate()
 {
 	if (Active) {
-		float RespawnTime = GetRespawnTime();
+		if (!BaseMesh || !BonusMesh) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Set BaseMesh or BonusMesh property in bonus blueprints"));
+			return;
+		}
 
+		float RespawnTime = GetRespawnTime();
+		
 		BaseMesh->SetHiddenInGame(false);
 		BonusMesh->SetHiddenInGame(true);
 
@@ -31,6 +36,10 @@ void ABonus::Activate()
 // Called when the bonus needs to respawn after the respawn time is out
 void ABonus::Respawn()
 {
+	if (!BaseMesh || !BonusMesh) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Set BaseMesh or BonusMesh property in bonus blueprints"));
+		return;
+	}
 	BaseMesh->SetHiddenInGame(true);
 	BonusMesh->SetHiddenInGame(false);
 
