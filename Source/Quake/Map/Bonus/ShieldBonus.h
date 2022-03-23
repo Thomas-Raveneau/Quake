@@ -26,4 +26,5 @@ public:
 
 	// Returns RespawnTime value
 	virtual float GetRespawnTime() override;
+
 };

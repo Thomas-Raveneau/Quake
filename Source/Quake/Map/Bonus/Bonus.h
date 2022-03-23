@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Bonus.generated.h"
 
-#define PURE_VIRTUAL(func) { LowLevelFatalError(TEXT("Pure virtual not implemented (%s)"), TEXT(#func));}
+#define PURE_VIRTUAL_VOID(func) { LowLevelFatalError(TEXT("Pure virtual not implemented (%s)"), TEXT(#func)); }
+#define PURE_VIRTUAL_NUM(func) { LowLevelFatalError(TEXT("Pure virtual not implemented (%s)"), TEXT(#func)); return -1;}
 
 UCLASS()
 class QUAKE_API ABonus : public AActor
@@ -18,26 +19,21 @@ public:
 		UStaticMeshComponent* BaseMesh;
 	UPROPERTY(BlueprintReadWrite, Category = "Components")
 		USkeletalMeshComponent* BonusMesh;
-
 	UPROPERTY(BlueprintReadWrite)
 		bool Active = true;
+	UPROPERTY(BlueprintReadWrite)
+		bool Mega = false;
 
 private:
 	// Respawn timer handler
 	UPROPERTY()
-	FTimerHandle TimerHandle;
+		FTimerHandle TimerHandle;
 
-public:	
+public:
 	// Default ABonus constructor
 	ABonus();
-	// Default ABonus destructor
-	virtual ~ABonus() {};
 
-public:	
-	// Called in derived class to apply bonus to the player
-	UFUNCTION(BlueprintCallable)
-	virtual void ApplyBonus() PURE_VIRTUAL(ABonus::ApplyBonus);
-
+public:
 	// Called when the player activate the bonus
 	UFUNCTION(BlueprintCallable)
 		void Activate();
@@ -46,7 +42,15 @@ public:
 	UFUNCTION()
 		void Respawn();
 
-	// Returns RespawnTime value
+	// Called in derived class to apply bonus to the player
 	UFUNCTION(BlueprintCallable)
-		virtual float GetRespawnTime();
+		virtual void ApplyBonus() PURE_VIRTUAL_VOID(ABonus::ApplyBonus);
+
+	// Called in derived class to get RespawnTime value
+	UFUNCTION(BlueprintCallable)
+		virtual float GetRespawnTime() PURE_VIRTUAL_NUM(ABonus::SetBonusAmount);
+
+	// Called in derived class to get BonusAmount value
+	UFUNCTION(BlueprintCallable)
+		virtual int GetBonusAmount() PURE_VIRTUAL_NUM(ABonus::GetBonusAmount);
 };

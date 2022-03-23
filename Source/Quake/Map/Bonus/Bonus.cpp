@@ -45,10 +45,3 @@ void ABonus::Respawn()
 
 	Active = true;
 }
-
-// Returns RespawnTime values
-float ABonus::GetRespawnTime()
-{
-	return 1.0f;
-}
-

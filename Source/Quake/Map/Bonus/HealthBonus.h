@@ -18,6 +18,8 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		int HealAmount = 50;
 	UPROPERTY(BlueprintReadOnly)
+		int MegaHealAmount = 50;
+	UPROPERTY(BlueprintReadOnly)
 		float RespawnTime = 15.0f;
 
 public:
@@ -26,4 +28,7 @@ public:
 
 	// Returns RespawnTime value
 	virtual float GetRespawnTime() override;
+
+	// Returns HealAmount value
+	virtual int GetBonusAmount() override;
 };
