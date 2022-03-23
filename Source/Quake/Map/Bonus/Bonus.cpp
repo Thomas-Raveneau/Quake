@@ -12,7 +12,7 @@ ABonus::ABonus()
 }
 
 // Called when the player activate the bonus
-void ABonus::Activate()
+void ABonus::Activate(AQuakePlayer* player)
 {
 	if (Active) {
 		if (!BaseMesh || !BonusMesh) {
@@ -29,7 +29,7 @@ void ABonus::Activate()
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABonus::Respawn, RespawnTime, false, RespawnTime);
 
 		Active = false;
-		ApplyBonus();
+		ApplyBonus(player);
 	}
 }
 

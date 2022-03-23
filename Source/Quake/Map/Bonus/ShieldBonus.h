@@ -18,13 +18,18 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 		int ShieldAmount = 50;
 	UPROPERTY(BlueprintReadOnly)
+		int MegaShieldAmount = 75;
+	UPROPERTY(BlueprintReadOnly)
 		float RespawnTime = 20.0f;
 
 public:
 	// Add shield to the player
-	virtual void ApplyBonus() override;
+	virtual void ApplyBonus(AQuakePlayer* player) override;
 
 	// Returns RespawnTime value
 	virtual float GetRespawnTime() override;
+
+	// Returns ShieldAmount value
+	virtual int GetBonusAmount() override;
 
 };

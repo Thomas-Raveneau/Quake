@@ -11,19 +11,6 @@ AQuakePlayer::AQuakePlayer()
 	SetReplicates(true);
 }
 
-// Called when the game starts or when spawned
-void AQuakePlayer::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-// Called every frame
-void AQuakePlayer::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-	// GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Pos %f"), PlayerPos.Y));
-}
-
 // Called to bind functionality to input
 void AQuakePlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
 {
@@ -38,6 +25,7 @@ void AQuakePlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputCompone
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::StopJumping);
 }
 
+// Called to configure class members replication
 void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -46,9 +34,12 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 	DOREPLIFETIME(AQuakePlayer, WeaponTP);
 }
 
+// Health management
 void AQuakePlayer::AddHealth(int amount)
 {
 	Health = Health + amount > MaxHealth ? MaxHealth : Health + amount;
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("NEW HEALTH %d"), Health));
 }
 
 void AQuakePlayer::SubstractHealth(int amount)
@@ -56,9 +47,12 @@ void AQuakePlayer::SubstractHealth(int amount)
 	Health = Health - amount < 0 ? 0 : Health - amount;
 }
 
+// Shield management
 void AQuakePlayer::AddShield(int amount)
 {
 	Shield = Shield + amount > MaxShield ? MaxShield : Shield + amount;
+
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("NEW SHIELD %d"), Shield));
 }
 
 void AQuakePlayer::SubstractShield(int amount)
@@ -66,6 +60,7 @@ void AQuakePlayer::SubstractShield(int amount)
 	Shield = Shield - amount < 0 ? 0 : Shield - amount;
 }
 
+// Inputs management
 void AQuakePlayer::MoveForward(float Value)
 {
 	AddMovementInput(GetActorForwardVector(), Value);

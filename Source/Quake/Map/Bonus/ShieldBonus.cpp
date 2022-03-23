@@ -3,12 +3,20 @@
 
 #include "ShieldBonus.h"
 
-void AShieldBonus::ApplyBonus()
+void AShieldBonus::ApplyBonus(AQuakePlayer* player)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("SHIELD"));
+	int ShieldToAdd = GetBonusAmount();
+
+	player->AddShield(ShieldToAdd);
 }
 
 float AShieldBonus::GetRespawnTime()
 {
 	return RespawnTime;
+}
+
+// Returns ShieldAmount value
+int AShieldBonus::GetBonusAmount()
+{
+	return !Mega ?ShieldAmount : MegaShieldAmount;
 }

@@ -20,17 +20,11 @@ public:
 	// Sets default values for this character's properties
 	AQuakePlayer();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	// Called to configure class members replication
 	virtual void GetLifetimeReplicatedProps( TArray< FLifetimeProperty > & OutLifetimeProps ) const override;
 
 public:
@@ -50,20 +44,21 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Weapon")
 	AWeapon *WeaponTP;
 
-private:
-	// Health management functions
+public:
+	// Health management
 	UFUNCTION(BlueprintCallable, Category="Stats")
 	void AddHealth(int amount);
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	void SubstractHealth(int amount);
 
-	// Shield management functions
+	// Shield management
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	void AddShield(int amount);
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	void SubstractShield(int amount);
 
-	// Inputs function
+private:
+	// Inputs management
 	UFUNCTION()
 	void MoveForward(float Value);
 	UFUNCTION()

@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "../../Characters/QuakePlayer.h"
+
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Bonus.generated.h"
@@ -36,7 +38,7 @@ public:
 public:
 	// Called when the player activate the bonus
 	UFUNCTION(BlueprintCallable)
-		void Activate();
+		void Activate(AQuakePlayer *player);
 
 	// Called when the bonus needs to respawn after the respawn time is out
 	UFUNCTION()
@@ -44,7 +46,7 @@ public:
 
 	// Called in derived class to apply bonus to the player
 	UFUNCTION(BlueprintCallable)
-		virtual void ApplyBonus() PURE_VIRTUAL_VOID(ABonus::ApplyBonus);
+		virtual void ApplyBonus(AQuakePlayer* player) PURE_VIRTUAL_VOID(ABonus::ApplyBonus);
 
 	// Called in derived class to get RespawnTime value
 	UFUNCTION(BlueprintCallable)

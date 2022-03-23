@@ -4,9 +4,11 @@
 #include "HealthBonus.h"
 
 // Heal the player
-void AHealthBonus::ApplyBonus()
+void AHealthBonus::ApplyBonus(AQuakePlayer* player)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("HEAL"));
+	int HealToAdd = GetBonusAmount();
+
+	player->AddHealth(HealToAdd);
 }
 
 // Returns RespawnTime value
