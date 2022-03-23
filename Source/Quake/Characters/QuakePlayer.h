@@ -31,12 +31,14 @@ public:
 	// Player health properties
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
 	int Health = 100;
-	const int MaxHealth = 200;
+	UPROPERTY(BlueprintReadOnly, Category = "Stats")
+	int MaxHealth = 200;
 
 	// Player shield properties
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
 	int Shield = 0;
-	const int MaxShield = 200;
+	UPROPERTY(BlueprintReadOnly, Category = "Stats")
+	int MaxShield = 200;
 	
 	// Player first and third person weapons
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Weapon")
