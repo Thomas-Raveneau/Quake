@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include <algorithm>
-
 #include "../Weapons/Weapon.h"
 
 #include "CoreMinimal.h"
@@ -39,12 +37,12 @@ public:
 	int Shield = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
 	int MaxShield = 200;
-	
+
 	// Player first and third person weapons
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Weapon")
-	AWeapon *WeaponFP;
+		AWeapon *WeaponFP;
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Weapon")
-	AWeapon *WeaponTP;
+		AWeapon *WeaponTP;
 
 public:
 	// Health management

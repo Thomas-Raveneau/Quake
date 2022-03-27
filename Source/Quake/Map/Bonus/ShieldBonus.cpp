@@ -3,11 +3,11 @@
 
 #include "ShieldBonus.h"
 
-void AShieldBonus::ApplyBonus(AQuakePlayer* player)
+void AShieldBonus::ApplyBonus(AQuakePlayer* Player)
 {
 	int ShieldToAdd = GetBonusAmount();
 
-	player->AddShield(ShieldToAdd);
+	Player->AddShield(ShieldToAdd);
 }
 
 float AShieldBonus::GetRespawnTime()

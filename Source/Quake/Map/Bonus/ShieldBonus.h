@@ -24,7 +24,7 @@ public:
 
 public:
 	// Add shield to the player
-	virtual void ApplyBonus(AQuakePlayer* player) override;
+	virtual void ApplyBonus(AQuakePlayer* Player) override;
 
 	// Returns RespawnTime value
 	virtual float GetRespawnTime() override;
