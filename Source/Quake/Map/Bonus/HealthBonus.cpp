@@ -8,7 +8,7 @@ void AHealthBonus::ApplyBonus(AQuakePlayer* Player)
 {
 	int HealToAdd = GetBonusAmount();
 
-	Player->AddHealth(HealToAdd);
+	Player->ServerAddHealth(HealToAdd);
 }
 
 // Returns RespawnTime value

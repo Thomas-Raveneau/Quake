@@ -30,6 +30,6 @@ void AProjectile::ApplyDamage(AQuakePlayer* Player)
 {
 	int Damage = GetDamage();
 
-	Player->SubstractHealth(Damage);
+	Player->ServerSubstractHealth(Damage);
 }
 

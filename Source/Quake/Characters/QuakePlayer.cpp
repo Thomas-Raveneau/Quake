@@ -32,17 +32,30 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 
 	DOREPLIFETIME(AQuakePlayer, WeaponFP);
 	DOREPLIFETIME(AQuakePlayer, WeaponTP);
+	DOREPLIFETIME(AQuakePlayer, Health);
+	DOREPLIFETIME(AQuakePlayer, Shield);
 }
 
 // Health management
-void AQuakePlayer::AddHealth(int amount)
+void AQuakePlayer::ServerAddHealth_Implementation(int amount)
 {
 	Health = Health + amount > MaxHealth ? MaxHealth : Health + amount;
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("NEW HEALTH %d"), Health));
+	//MulticastAddHealth(Health);
 }
 
-void AQuakePlayer::SubstractHealth(int amount)
+void AQuakePlayer::MulticastAddHealth_Implementation(int amount)
+{
+	Health = Health + amount > MaxHealth ? MaxHealth : Health + amount;
+}
+
+void AQuakePlayer::ServerSubstractHealth_Implementation(int amount)
+{
+	Health = Health - amount < 0 ? 0 : Health - amount;
+
+	//MulticastSubstractHealth(amount);
+}
+
+void AQuakePlayer::MulticastSubstractHealth_Implementation(int amount)
 {
 	Health = Health - amount < 0 ? 0 : Health - amount;
 }
