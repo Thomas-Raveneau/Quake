@@ -108,8 +108,6 @@ void AQuakePlayer::Destroyed()
 
 void AQuakePlayer::ServerHandleDeath_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("DIE")));
-
 	//Get a reference to the Pawn Controller.
 	AController* ControllerRef = GetController();
 
@@ -121,7 +119,7 @@ void AQuakePlayer::ServerHandleDeath_Implementation()
 	{
 		if (ADeathmatch* GameMode = Cast<ADeathmatch>(World->GetAuthGameMode()))
 		{
-			GameMode->RestartPlayer(ControllerRef);
+			GameMode->RespawnPlayer(ControllerRef);
 		}
 	}
 }

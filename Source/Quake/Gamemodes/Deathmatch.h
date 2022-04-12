@@ -18,23 +18,34 @@ class QUAKE_API ADeathmatch : public AGameModeBase
 {
 
 	GENERATED_BODY()
-	
+
 public:
-    ADeathmatch();
+	ADeathmatch();
 
-    const FOnPlayerDiedSignature& GetOnPlayerDied() const { return OnPlayerDied; }
+	const FOnPlayerDiedSignature& GetOnPlayerDied() const { return OnPlayerDied; }
 
-    //Tries to Spawn the player's pawn.
-    virtual void RestartPlayer(AController* NewPlayer) override;
+	void RespawnPlayer(AController* NewPlayer);
 
 protected:
-    virtual void BeginPlay() override;
+	virtual void BeginPlay() override;
 
-    //Called when Player character has died.
-    UFUNCTION()
-        virtual void PlayerDied(ACharacter* Character);
+	//Tries to Spawn the player's pawn.
+	virtual void RestartPlayerAtPlayerStart(AController* NewPlayer, AActor* PlayerStart) override;
 
-    //Signature to bind delegate. 
-    UPROPERTY()
-        FOnPlayerDiedSignature OnPlayerDied;
+	UFUNCTION()
+		AActor* GetRandomPlayerStart();
+
+	UFUNCTION(Server, Reliable)
+		void ServerDisablePlayerStart(AActor* PlayerStart);
+
+	UFUNCTION(Server, Reliable)
+		void ServerEnablePlayerStart(AActor* PlayerStart);
+
+	//Called when Player character has died.
+	UFUNCTION()
+		virtual void PlayerDied(ACharacter* Character);
+
+	//Signature to bind delegate. 
+	UPROPERTY()
+		FOnPlayerDiedSignature OnPlayerDied;
 };
