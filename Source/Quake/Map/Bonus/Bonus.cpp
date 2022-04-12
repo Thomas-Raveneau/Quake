@@ -25,7 +25,6 @@ void ABonus::Activate(AQuakePlayer* Player)
 		BaseMesh->SetHiddenInGame(false);
 		BonusMesh->SetHiddenInGame(true);
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("TIME %f"), RespawnTime));
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABonus::Respawn, RespawnTime, false, RespawnTime);
 
 		Active = false;
