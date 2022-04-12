@@ -16,6 +16,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerDiedSignature, ACharacter*,
 UCLASS()
 class QUAKE_API ADeathmatch : public AGameModeBase
 {
+
 	GENERATED_BODY()
 	
 public:

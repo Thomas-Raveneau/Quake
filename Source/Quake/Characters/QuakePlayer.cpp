@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "QuakePlayer.h"
+#include "../Gamemodes/Deathmatch.h"
 
 // Sets default values
 AQuakePlayer::AQuakePlayer()
@@ -9,10 +10,12 @@ AQuakePlayer::AQuakePlayer()
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
 	SetReplicates(true);
+
+	ServerAddHealth(SPAWN_HEALTH);
 }
 
 // Called to bind functionality to input
-void AQuakePlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputComponent)
+void AQuakePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
@@ -24,11 +27,11 @@ void AQuakePlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputCompone
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AQuakePlayer::Jump);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::StopJumping);
 
-	PlayerInputComponent->BindAction(TEXT("RespawnDebug"), IE_Pressed, this, &AQuakePlayer::HandleDeath);
+	PlayerInputComponent->BindAction(TEXT("RespawnDebug"), IE_Pressed, this, &AQuakePlayer::ServerHandleDeath);
 }
 
 // Called to configure class members replication
-void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLifetimeProps) const
+void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
@@ -42,12 +45,6 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 void AQuakePlayer::ServerAddHealth_Implementation(int amount)
 {
 	Health = Health + amount > MaxHealth ? MaxHealth : Health + amount;
-	//MulticastAddHealth(Health);
-}
-
-void AQuakePlayer::MulticastAddHealth_Implementation(int amount)
-{
-	Health = Health + amount > MaxHealth ? MaxHealth : Health + amount;
 }
 
 void AQuakePlayer::ServerSubstractHealth_Implementation(int amount)
@@ -55,15 +52,8 @@ void AQuakePlayer::ServerSubstractHealth_Implementation(int amount)
 	Health = Health - amount < 0 ? 0 : Health - amount;
 
 	if (Health == 0) {
-		HandleDeath();
+		ServerHandleDeath();
 	}
-
-	//MulticastSubstractHealth(amount);
-}
-
-void AQuakePlayer::MulticastSubstractHealth_Implementation(int amount)
-{
-	Health = Health - amount < 0 ? 0 : Health - amount;
 }
 
 // Shield management
@@ -98,7 +88,40 @@ void AQuakePlayer::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
-void AQuakePlayer::HandleDeath()
+// Death management
+void AQuakePlayer::Destroyed()
+{
+	Super::Destroyed();
+
+	WeaponTP->Destroy();
+	WeaponFP->Destroy();
+
+	// Example to bind to OnPlayerDied event in GameMode. 
+	if (UWorld* World = GetWorld())
+	{
+		if (ADeathmatch* GameMode = Cast<ADeathmatch>(World->GetAuthGameMode()))
+		{
+			GameMode->GetOnPlayerDied().Broadcast(this);
+		}
+	}
+}
+
+void AQuakePlayer::ServerHandleDeath_Implementation()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("DIE")));
+
+	//Get a reference to the Pawn Controller.
+	AController* ControllerRef = GetController();
+
+	//Destroy the Player.   
+	Destroy();
+
+	//Get the World and GameMode in the world to invoke its restart player function.
+	if (UWorld* World = GetWorld())
+	{
+		if (ADeathmatch* GameMode = Cast<ADeathmatch>(World->GetAuthGameMode()))
+		{
+			GameMode->RestartPlayer(ControllerRef);
+		}
+	}
 }
