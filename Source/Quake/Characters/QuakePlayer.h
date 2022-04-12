@@ -71,4 +71,7 @@ private:
 		void Turn(float Value);
 	UFUNCTION()
 		void LookUp(float Value);
+
+	UFUNCTION()
+		void HandleDeath();
 };
