@@ -9,6 +9,12 @@
 #include "GameFramework/Character.h"
 #include "QuakePlayer.generated.h"
 
+// Base stats
+#define SPAWN_HEALTH 50
+#define SPAWN_SHIELD 25
+#define MAX_HEALTH 100
+#define MAX_SHIELD 100
+
 UCLASS()
 class QUAKE_API AQuakePlayer : public ACharacter
 {
@@ -28,15 +34,15 @@ public:
 public:
 	// Player health properties
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
-		int Health = 100;
+		int Health = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
-		int MaxHealth = 200;
+		int MaxHealth = MAX_HEALTH;
 
 	// Player shield properties
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
 		int Shield = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
-		int MaxShield = 200;
+		int MaxShield = MAX_SHIELD;
 
 	// Player first and third person weapons
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
@@ -48,18 +54,22 @@ public:
 	// Health management
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Stats")
 		void ServerAddHealth(int amount);
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "Stats")
-		void MulticastAddHealth(int amount);
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Stats")
 		void ServerSubstractHealth(int amount);
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "Stats")
-		void MulticastSubstractHealth(int amount);
+	
 
 	// Shield management
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 		void AddShield(int amount);
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 		void SubstractShield(int amount);
+
+protected: 
+	//Called when our Actor is destroyed during Gameplay.
+	virtual void Destroyed();
+
+	//Call Gamemode class to Restart Player Character.
+	void CallRestartPlayer();
 
 private:
 	// Inputs management
@@ -72,6 +82,6 @@ private:
 	UFUNCTION()
 		void LookUp(float Value);
 
-	UFUNCTION()
-		void HandleDeath();
+	UFUNCTION(Server, Reliable)
+		void ServerHandleDeath();
 };
