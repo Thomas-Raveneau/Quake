@@ -23,6 +23,8 @@ void AQuakePlayer::SetupPlayerInputComponent(UInputComponent *PlayerInputCompone
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AQuakePlayer::Jump);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::StopJumping);
+
+	PlayerInputComponent->BindAction(TEXT("RespawnDebug"), IE_Pressed, this, &AQuakePlayer::HandleDeath);
 }
 
 // Called to configure class members replication
@@ -32,17 +34,34 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> &OutLife
 
 	DOREPLIFETIME(AQuakePlayer, WeaponFP);
 	DOREPLIFETIME(AQuakePlayer, WeaponTP);
+	DOREPLIFETIME(AQuakePlayer, Health);
+	DOREPLIFETIME(AQuakePlayer, Shield);
 }
 
 // Health management
-void AQuakePlayer::AddHealth(int amount)
+void AQuakePlayer::ServerAddHealth_Implementation(int amount)
 {
 	Health = Health + amount > MaxHealth ? MaxHealth : Health + amount;
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("NEW HEALTH %d"), Health));
+	//MulticastAddHealth(Health);
 }
 
-void AQuakePlayer::SubstractHealth(int amount)
+void AQuakePlayer::MulticastAddHealth_Implementation(int amount)
+{
+	Health = Health + amount > MaxHealth ? MaxHealth : Health + amount;
+}
+
+void AQuakePlayer::ServerSubstractHealth_Implementation(int amount)
+{
+	Health = Health - amount < 0 ? 0 : Health - amount;
+
+	if (Health == 0) {
+		HandleDeath();
+	}
+
+	//MulticastSubstractHealth(amount);
+}
+
+void AQuakePlayer::MulticastSubstractHealth_Implementation(int amount)
 {
 	Health = Health - amount < 0 ? 0 : Health - amount;
 }
@@ -51,8 +70,6 @@ void AQuakePlayer::SubstractHealth(int amount)
 void AQuakePlayer::AddShield(int amount)
 {
 	Shield = Shield + amount > MaxShield ? MaxShield : Shield + amount;
-
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("NEW SHIELD %d"), Shield));
 }
 
 void AQuakePlayer::SubstractShield(int amount)
@@ -79,4 +96,9 @@ void AQuakePlayer::Turn(float Value)
 void AQuakePlayer::LookUp(float Value)
 {
 	AddControllerPitchInput(Value);
+}
+
+void AQuakePlayer::HandleDeath()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("DIE")));
 }

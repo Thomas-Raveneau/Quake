@@ -4,11 +4,11 @@
 #include "HealthBonus.h"
 
 // Heal the player
-void AHealthBonus::ApplyBonus(AQuakePlayer* player)
+void AHealthBonus::ApplyBonus(AQuakePlayer* Player)
 {
 	int HealToAdd = GetBonusAmount();
 
-	player->AddHealth(HealToAdd);
+	Player->ServerAddHealth(HealToAdd);
 }
 
 // Returns RespawnTime value

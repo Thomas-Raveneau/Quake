@@ -12,7 +12,7 @@ ABonus::ABonus()
 }
 
 // Called when the player activate the bonus
-void ABonus::Activate(AQuakePlayer* player)
+void ABonus::Activate(AQuakePlayer* Player)
 {
 	if (Active) {
 		if (!BaseMesh || !BonusMesh) {
@@ -25,11 +25,10 @@ void ABonus::Activate(AQuakePlayer* player)
 		BaseMesh->SetHiddenInGame(false);
 		BonusMesh->SetHiddenInGame(true);
 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("TIME %f"), RespawnTime));
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABonus::Respawn, RespawnTime, false, RespawnTime);
 
 		Active = false;
-		ApplyBonus(player);
+		ApplyBonus(Player);
 	}
 }
 

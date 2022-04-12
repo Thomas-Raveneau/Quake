@@ -3,6 +3,8 @@
 
 #include "Weapon.h"
 
+#include "DrawDebugHelpers.h"
+
 // Sets default values
 AWeapon::AWeapon()
 {
@@ -11,17 +13,47 @@ AWeapon::AWeapon()
 
 }
 
-// Called when the game starts or when spawned
-void AWeapon::BeginPlay()
+// Makes the weapon shoot
+FTransform AWeapon::Shoot(FVector CameraForwardVector, FRotator CameraRotation)
 {
-	Super::BeginPlay();
+	// TODO - Check weapon shooting conditions (ammo, etc...)
+	const FVector MuzzleLocation = GetMuzzleLocation();
+	const FHitResult ShootingTrajectory = GetShootingTrajectory(MuzzleLocation, CameraForwardVector);
+	const FVector ProjectileSpawnLocation = MuzzleLocation;
+	const FRotator ProjectileSpawnRotation = UKismetMathLibrary::GetDirectionUnitVector(MuzzleLocation, ShootingTrajectory.ImpactPoint).Rotation();
+	const FTransform ProjectileSpawnTransform = FTransform(ProjectileSpawnRotation, ProjectileSpawnLocation);
+
+	return ProjectileSpawnTransform;
+}
+
+FHitResult AWeapon::GetShootingTrajectory(FVector MuzzleLocation, FVector CameraForwardVector)
+{
+	FVector PlayerLocation;
+	FRotator PlayerRotation;
+	FVector Start;
+	FVector End;
+	FHitResult PlayerCamHit;
+	FHitResult MuzzleHit;
+
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(PlayerLocation, PlayerRotation);
+
+	Start = PlayerLocation;
+	End = Start + (CameraForwardVector * 20000);
+
+	FCollisionQueryParams TraceParams;
+	GetWorld()->LineTraceSingleByChannel(PlayerCamHit, Start, End, ECC_Visibility, TraceParams);
+
+	FVector MuzzleStart = MuzzleLocation;
+	FVector DirectVector = UKismetMathLibrary::GetDirectionUnitVector(MuzzleLocation, PlayerCamHit.ImpactPoint);
+	FVector MuzzleEnd = PlayerCamHit.ImpactPoint + (DirectVector * 2);
 	
+
+	GetWorld()->LineTraceSingleByChannel(MuzzleHit, MuzzleStart, MuzzleEnd, ECC_Visibility, TraceParams);
+
+	// Player cam debug line
+	//DrawDebugLine(GetWorld(), PlayerCamHit.TraceStart, PlayerCamHit.ImpactPoint, FColor::Orange, false, 2.0f);
+	// Muzzle debug line
+	//DrawDebugLine(GetWorld(), MuzzleHit.TraceStart, MuzzleHit.ImpactPoint, FColor::Red, true, 2.0f);
+
+	return MuzzleHit;
 }
-
-// Called every frame
-void AWeapon::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
