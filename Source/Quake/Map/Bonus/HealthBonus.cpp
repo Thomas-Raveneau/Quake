@@ -14,7 +14,7 @@ void AHealthBonus::ApplyBonus(AQuakePlayer* Player)
 // Returns RespawnTime value
 float AHealthBonus::GetRespawnTime()
 {
-	return RespawnTime;
+	return !Mega ? RespawnTime : MegaRespawnTime;
 }
 
 // Returns HealAmount value
