@@ -6,9 +6,12 @@
 #include "Bonus.h"
 #include "ShieldBonus.generated.h"
 
-/**
- * 
- */
+// Shield bonus stats
+#define NORMAL_SHIELD 50
+#define MEGA_SHIELD 75
+#define NORMAL_RESPAWN_TIME 15.0f
+#define MEGA_RESPAWN_TIME 20.0f
+
 UCLASS()
 class QUAKE_API AShieldBonus : public ABonus
 {
@@ -16,11 +19,13 @@ class QUAKE_API AShieldBonus : public ABonus
 	
 public:
 	UPROPERTY(BlueprintReadOnly)
-		int ShieldAmount = 50;
+		int ShieldAmount = NORMAL_SHIELD;
 	UPROPERTY(BlueprintReadOnly)
-		int MegaShieldAmount = 75;
+		int MegaShieldAmount = MEGA_SHIELD;
 	UPROPERTY(BlueprintReadOnly)
-		float RespawnTime = 20.0f;
+		float RespawnTime = NORMAL_RESPAWN_TIME;
+	UPROPERTY(BlueprintReadOnly)
+		float MegaRespawnTime = MEGA_RESPAWN_TIME;
 
 public:
 	// Add shield to the player

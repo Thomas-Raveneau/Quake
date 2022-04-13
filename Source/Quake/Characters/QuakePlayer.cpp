@@ -54,15 +54,18 @@ void AQuakePlayer::ServerTakeDamage_Implementation(int amount, AController* inst
 		amount /= 2;
 	}
 
-	damageToShield = (amount * 2) / 3;									// Shield takes 2/3 of received damages
+	// Shield takes 2/3 of received damages
+	damageToShield = (amount * 2) / 3;
 
-	if (Shield < damageToShield) 
+	if (Shield < damageToShield)
 	{
 		damageNotTakenByShield = damageToShield - Shield;
 	}
 
-	damageToHealth = amount - damageToShield + damageNotTakenByShield;	// Health takes 1/3 of received damages
+	// Health takes 1/3 of received damages
+	damageToHealth = amount - damageToShield + damageNotTakenByShield;
 
+	// Apply damages to shield and health
 	ServerSubstractShield(damageToShield);
 	ServerSubstractHealth(damageToHealth);
 

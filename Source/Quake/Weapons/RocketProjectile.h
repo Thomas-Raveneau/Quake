@@ -6,9 +6,8 @@
 #include "Projectile.h"
 #include "RocketProjectile.generated.h"
 
-/**
- * 
- */
+#define ROCKET_DAMAGE 125
+
 UCLASS()
 class QUAKE_API ARocketProjectile : public AProjectile
 {
@@ -16,7 +15,7 @@ class QUAKE_API ARocketProjectile : public AProjectile
 	
 public: 
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
-		int RocketDamage = 100;
+		int RocketDamage = ROCKET_DAMAGE;
 public:
 	virtual int GetDamage() override;
 };

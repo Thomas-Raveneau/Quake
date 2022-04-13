@@ -19,6 +19,7 @@ ADeathmatch::ADeathmatch()
 		HUDClass = PlayerHUDCLass.Class;
 }
 
+// Respawn the player
 void ADeathmatch::RespawnPlayer(AController* NewPlayer)
 {
 	AActor* randomPlayerStart = GetRandomPlayerStart();
@@ -26,6 +27,7 @@ void ADeathmatch::RespawnPlayer(AController* NewPlayer)
 	RestartPlayerAtPlayerStart(NewPlayer, randomPlayerStart);
 }
 
+// Init on first frame
 void ADeathmatch::BeginPlay()
 {
 	Super::BeginPlay();
@@ -37,6 +39,13 @@ void ADeathmatch::BeginPlay()
 	}
 }
 
+//Tries to Spawn the player's pawn
+void ADeathmatch::RestartPlayerAtPlayerStart(AController* NewPlayer, AActor* StartSpot)
+{
+	Super::RestartPlayerAtPlayerStart(NewPlayer, StartSpot);
+}
+
+// Return one random PlayerStart in current level
 AActor* ADeathmatch::GetRandomPlayerStart()
 {
 	TArray<AActor*> FoundPlayerStarts;
@@ -55,6 +64,7 @@ AActor* ADeathmatch::GetRandomPlayerStart()
 	return FoundPlayerStarts[randomIndex];
 }
 
+// Disable passed PlayerStart
 void ADeathmatch::ServerDisablePlayerStart_Implementation(AActor* PlayerStart)
 {
 	FTimerDelegate TimerDel;
@@ -66,16 +76,13 @@ void ADeathmatch::ServerDisablePlayerStart_Implementation(AActor* PlayerStart)
 	GetWorldTimerManager().SetTimer(TimerHandle, TimerDel, 1.5f, false);
 }
 
+// Enable passed PlayerStart
 void ADeathmatch::ServerEnablePlayerStart_Implementation(AActor* PlayerStart)
 {
 	PlayerStart->Tags.Empty();
 }
 
-void ADeathmatch::RestartPlayerAtPlayerStart(AController* NewPlayer, AActor* StartSpot)
-{
-	Super::RestartPlayerAtPlayerStart(NewPlayer, StartSpot);
-}
-
+// Called when Player character has died
 void ADeathmatch::PlayerDied(ACharacter* Character)
 {
 	AActor* randomPlayerStart = GetRandomPlayerStart();
