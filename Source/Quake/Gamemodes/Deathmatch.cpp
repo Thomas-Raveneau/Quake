@@ -17,9 +17,6 @@ ADeathmatch::ADeathmatch()
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	if (PlayerHUDCLass.Class != NULL)
 		HUDClass = PlayerHUDCLass.Class;
-
-	bReplicates = true;
-	SetReplicates(true);
 }
 
 void ADeathmatch::RespawnPlayer(AController* NewPlayer)
@@ -45,23 +42,13 @@ AActor* ADeathmatch::GetRandomPlayerStart()
 	TArray<AActor*> FoundPlayerStarts;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundPlayerStarts);
 	int randomIndex;
-	int nbTaken = 0;
 	bool playerStartFound = false;
-
-	for (int i = 0; i != FoundPlayerStarts.Num() - 1; i++) {
-		if (FoundPlayerStarts[i]->Tags.Contains("Taken"))
-			nbTaken += 1;
-	}
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("NB TAKEN: %d"), nbTaken));
 
 	while (!playerStartFound) {
 		randomIndex = FMath::RandRange(0, FoundPlayerStarts.Num() - 1);
 
 		if (!FoundPlayerStarts[randomIndex]->Tags.Contains("Taken")) {
 			playerStartFound = true;
-		}
-		else {
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("TAKEN")));
 		}
 	}
 

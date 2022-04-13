@@ -9,7 +9,6 @@ AQuakePlayer::AQuakePlayer()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
-	SetReplicates(true);
 
 	ServerAddHealth(SPAWN_HEALTH);
 }
@@ -93,8 +92,14 @@ void AQuakePlayer::Destroyed()
 {
 	Super::Destroyed();
 
-	WeaponTP->Destroy();
-	WeaponFP->Destroy();
+	if (IsValid(WeaponTP))
+	{
+		WeaponTP->Destroy();
+	}
+	if (IsValid(WeaponFP))
+	{
+		WeaponFP->Destroy();
+	}
 
 	// Example to bind to OnPlayerDied event in GameMode. 
 	if (UWorld* World = GetWorld())
