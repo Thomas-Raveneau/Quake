@@ -7,7 +7,7 @@ void AShieldBonus::ApplyBonus(AQuakePlayer* Player)
 {
 	int ShieldToAdd = GetBonusAmount();
 
-	Player->AddShield(ShieldToAdd);
+	Player->ServerAddShield(ShieldToAdd);
 }
 
 float AShieldBonus::GetRespawnTime()

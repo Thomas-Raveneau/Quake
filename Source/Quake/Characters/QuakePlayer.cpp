@@ -40,6 +40,38 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(AQuakePlayer, Shield);
 }
 
+// Damage management
+void AQuakePlayer::ServerTakeDamage_Implementation(int amount, AController* instigatedBy, AActor* DamageCauser)
+{
+	AController* controllerRef = GetController();
+	int damageToShield;
+	int damageToHealth;
+	int damageNotTakenByShield = 0;
+
+	// Divide damage by 2 in case of self damage
+	if (controllerRef == instigatedBy)
+	{
+		amount /= 2;
+	}
+
+	damageToShield = (amount * 2) / 3;									// Shield takes 2/3 of received damages
+
+	if (Shield < damageToShield) 
+	{
+		damageNotTakenByShield = damageToShield - Shield;
+	}
+
+	damageToHealth = amount - damageToShield + damageNotTakenByShield;	// Health takes 1/3 of received damages
+
+	ServerSubstractShield(damageToShield);
+	ServerSubstractHealth(damageToHealth);
+
+	// Check if player is dead
+	if (Health == 0) {
+		ServerHandleDeath();
+	}
+}
+
 // Health management
 void AQuakePlayer::ServerAddHealth_Implementation(int amount)
 {
@@ -49,19 +81,15 @@ void AQuakePlayer::ServerAddHealth_Implementation(int amount)
 void AQuakePlayer::ServerSubstractHealth_Implementation(int amount)
 {
 	Health = Health - amount < 0 ? 0 : Health - amount;
-
-	if (Health == 0) {
-		ServerHandleDeath();
-	}
 }
 
 // Shield management
-void AQuakePlayer::AddShield(int amount)
+void AQuakePlayer::ServerAddShield_Implementation(int amount)
 {
 	Shield = Shield + amount > MaxShield ? MaxShield : Shield + amount;
 }
 
-void AQuakePlayer::SubstractShield(int amount)
+void AQuakePlayer::ServerSubstractShield_Implementation(int amount)
 {
 	Shield = Shield - amount < 0 ? 0 : Shield - amount;
 }

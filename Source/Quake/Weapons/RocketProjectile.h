@@ -16,7 +16,7 @@ class QUAKE_API ARocketProjectile : public AProjectile
 	
 public: 
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
-		int RocketDamage = 25;
+		int RocketDamage = 100;
 public:
 	virtual int GetDamage() override;
 };

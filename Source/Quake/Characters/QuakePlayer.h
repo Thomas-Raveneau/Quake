@@ -51,18 +51,22 @@ public:
 		AWeapon* WeaponTP;
 
 public:
+	// Damage management
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerTakeDamage(int amount, AController *instigatedBy, AActor *DamageCauser);
+
 	// Health management
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Stats")
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 		void ServerAddHealth(int amount);
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Stats")
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 		void ServerSubstractHealth(int amount);
 	
 
 	// Shield management
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-		void AddShield(int amount);
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-		void SubstractShield(int amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerAddShield(int amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerSubstractShield(int amount);
 
 protected: 
 	//Called when our Actor is destroyed during Gameplay.
