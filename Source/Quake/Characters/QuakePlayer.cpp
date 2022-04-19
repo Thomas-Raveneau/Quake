@@ -11,6 +11,7 @@ AQuakePlayer::AQuakePlayer()
 	bReplicates = true;
 
 	ServerAddHealth(SPAWN_HEALTH);
+	ServerAddRocket(SPAWN_ROCKET);
 }
 
 // Called to bind functionality to input
@@ -38,6 +39,7 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(AQuakePlayer, WeaponTP);
 	DOREPLIFETIME(AQuakePlayer, Health);
 	DOREPLIFETIME(AQuakePlayer, Shield);
+	DOREPLIFETIME(AQuakePlayer, AmmoRocket);
 }
 
 // Damage management
@@ -95,6 +97,41 @@ void AQuakePlayer::ServerAddShield_Implementation(int amount)
 void AQuakePlayer::ServerSubstractShield_Implementation(int amount)
 {
 	Shield = Shield - amount < 0 ? 0 : Shield - amount;
+}
+
+// Ammos management
+void AQuakePlayer::ServerAddRocket_Implementation(int amount)
+{
+	AmmoRocket = AmmoRocket + amount > MaxAmmoRocket ? MaxAmmoRocket : AmmoRocket + amount;
+}
+
+void AQuakePlayer::ServerSubstractRocket_Implementation(int amount)
+{
+	AmmoRocket = AmmoRocket - amount < 0 ? 0 : AmmoRocket - amount;
+}
+
+void AQuakePlayer::Shoot_Implementation(FVector CameraForwardVector, FRotator CameraRotation)
+{
+	if (AmmoRocket > 0) {
+		FTransform rocketTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
+		
+		ServerSpawnProjectile(rocketTransform);
+		ServerSubstractRocket(1);
+	}
+}
+
+void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTransform)
+{
+	if (RocketActor) 
+	{
+		if (UWorld* World = GetWorld())
+		{
+			FActorSpawnParameters spawnParams;
+			spawnParams.Owner = this;
+
+			World->SpawnActor<AActor>(RocketActor, ProjectileTransform, spawnParams);
+		}
+	}
 }
 
 // Inputs management

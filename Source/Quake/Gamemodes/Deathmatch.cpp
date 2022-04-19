@@ -11,7 +11,7 @@ ADeathmatch::ADeathmatch()
 {
 	// Set default pawn class and HUD class
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Player/BP_Player"));
-	static ConstructorHelpers::FClassFinder<AHUD> PlayerHUDCLass(TEXT("/Game/Blueprints/UI/HUD_Player"));
+	static ConstructorHelpers::FClassFinder<AHUD> PlayerHUDCLass(TEXT("/Game/Blueprints/UI/HUD/HUD_Player"));
 
 	if (PlayerPawnBPClass.Class != NULL)
 		DefaultPawnClass = PlayerPawnBPClass.Class;

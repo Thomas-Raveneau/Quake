@@ -6,13 +6,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Bonus.generated.h"
+#include "WeaponPoint.generated.h"
 
 #define PURE_VIRTUAL_VOID(func) { LowLevelFatalError(TEXT("Pure virtual not implemented (%s)"), TEXT(#func)); }
 #define PURE_VIRTUAL_NUM(func) { LowLevelFatalError(TEXT("Pure virtual not implemented (%s)"), TEXT(#func)); return -1;}
 
 UCLASS()
-class QUAKE_API ABonus : public AActor
+class QUAKE_API AWeaponPoint : public AActor
 {
 	GENERATED_BODY()
 
@@ -20,11 +20,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Components")
 		UStaticMeshComponent* BaseMesh;
 	UPROPERTY(BlueprintReadWrite, Category = "Components")
-		USkeletalMeshComponent* BonusMesh;
+		USkeletalMeshComponent* WeaponMesh;
 	UPROPERTY(BlueprintReadWrite)
 		bool Active = true;
-	UPROPERTY(BlueprintReadWrite)
-		bool Mega = false;
 
 private:
 	// Respawn timer handler
@@ -32,27 +30,27 @@ private:
 		FTimerHandle TimerHandle;
 
 public:
-	// Default ABonus constructor
-	ABonus();
+	// Default AWeaponPoint constructor
+	AWeaponPoint();
 
 public:
-	// Called when the player activate the bonus
+	// Called when the player activate the point
 	UFUNCTION(BlueprintCallable)
-		void Activate(AQuakePlayer *Player);
+		void Activate(AQuakePlayer* Player);
 
 	// Called when the bonus needs to respawn after the respawn time is out
 	UFUNCTION()
 		void Respawn();
 
-	// Called in derived class to apply bonus to the player
+	// Called in derived class to give ammos to the player
 	UFUNCTION(BlueprintCallable)
-		virtual void ApplyBonus(AQuakePlayer* Player) PURE_VIRTUAL_VOID(ABonus::ApplyBonus);
+		virtual void GiveAmmo(AQuakePlayer* Player) PURE_VIRTUAL_VOID(ABonus::GiveAmmo);
 
 	// Called in derived class to get RespawnTime value
 	UFUNCTION(BlueprintCallable)
 		virtual float GetRespawnTime() PURE_VIRTUAL_NUM(ABonus::GetRespawnTime);
 
-	// Called in derived class to get BonusAmount value
+	// Called in derived class to get GetAmmoAmount value
 	UFUNCTION(BlueprintCallable)
-		virtual int GetBonusAmount() PURE_VIRTUAL_NUM(ABonus::GetBonusAmount);
+		virtual int GetAmmoAmount() PURE_VIRTUAL_NUM(ABonus::GetAmmoAmount);
 };
