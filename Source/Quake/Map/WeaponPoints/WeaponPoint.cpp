@@ -15,14 +15,13 @@ AWeaponPoint::AWeaponPoint()
 void AWeaponPoint::Activate(AQuakePlayer* Player)
 {
 	if (Active) {
-		if (!BaseMesh || !WeaponMesh) {
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Set BaseMesh or BonusMesh property in bonus blueprints"));
+		if (!WeaponMesh) {
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Set WeaponMesh property in WeaponPoint blueprints"));
 			return;
 		}
 
 		float RespawnTime = GetRespawnTime();
 
-		BaseMesh->SetHiddenInGame(false);
 		WeaponMesh->SetHiddenInGame(true);
 
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &AWeaponPoint::Respawn, RespawnTime, false, RespawnTime);
@@ -35,13 +34,11 @@ void AWeaponPoint::Activate(AQuakePlayer* Player)
 // Called when the bonus needs to respawn after the respawn time is out
 void AWeaponPoint::Respawn()
 {
-	if (!BaseMesh || !WeaponMesh) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Set BaseMesh or BonusMesh property in bonus blueprints"));
+	if (!WeaponMesh) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Set WeaponMesh property in WeaponPoint blueprints"));
 		return;
 	}
-	BaseMesh->SetHiddenInGame(true);
 	WeaponMesh->SetHiddenInGame(false);
 
 	Active = true;
 }
-

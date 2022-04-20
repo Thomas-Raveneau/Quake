@@ -8,7 +8,7 @@ void ARocketLauncherPoint::GiveAmmo(AQuakePlayer* Player)
 {
 	int AmmoToAdd = GetAmmoAmount();
 
-	//Player->ServerAddAmmo(AmmoToAdd, AMMOTYPE);
+	Player->ServerAddRocket(AmmoToAdd);
 }
 
 // Returns RespawnTime value

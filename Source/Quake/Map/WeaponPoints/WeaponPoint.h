@@ -18,8 +18,6 @@ class QUAKE_API AWeaponPoint : public AActor
 
 public:
 	UPROPERTY(BlueprintReadWrite, Category = "Components")
-		UStaticMeshComponent* BaseMesh;
-	UPROPERTY(BlueprintReadWrite, Category = "Components")
 		USkeletalMeshComponent* WeaponMesh;
 	UPROPERTY(BlueprintReadWrite)
 		bool Active = true;
@@ -44,13 +42,13 @@ public:
 
 	// Called in derived class to give ammos to the player
 	UFUNCTION(BlueprintCallable)
-		virtual void GiveAmmo(AQuakePlayer* Player) PURE_VIRTUAL_VOID(ABonus::GiveAmmo);
+		virtual void GiveAmmo(AQuakePlayer* Player) PURE_VIRTUAL_VOID(AWeaponPoint::GiveAmmo);;
 
 	// Called in derived class to get RespawnTime value
 	UFUNCTION(BlueprintCallable)
-		virtual float GetRespawnTime() PURE_VIRTUAL_NUM(ABonus::GetRespawnTime);
+		virtual float GetRespawnTime() PURE_VIRTUAL_NUM(AWeaponPoint::GetRespawnTime);
 
 	// Called in derived class to get GetAmmoAmount value
 	UFUNCTION(BlueprintCallable)
-		virtual int GetAmmoAmount() PURE_VIRTUAL_NUM(ABonus::GetAmmoAmount);
+		virtual int GetAmmoAmount() PURE_VIRTUAL_NUM(AWeaponPoint::GetAmmoAmount);
 };

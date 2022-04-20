@@ -6,7 +6,7 @@
 #include "WeaponPoint.h"
 #include "RocketLauncherPoint.generated.h"
 
-#define AMMO_AMOUNT 50
+#define AMMO_AMOUNT 1
 #define RESPAWN_TIME 15.0f
 
 UCLASS()
