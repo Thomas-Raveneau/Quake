@@ -87,8 +87,8 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 		void ServerSubstractRocket(int amount);
 
-	// Shoot and returns projectile transformation
-	UFUNCTION(Server, Reliable, BlueprintCallable)
+	// Shooting management
+	UFUNCTION(BlueprintCallable)
 		void Shoot(FVector CameraForwardVector, FRotator CameraRotation);
 
 	// Spawn projectile of current weapon
@@ -113,6 +113,7 @@ private:
 	UFUNCTION()
 		void LookUp(float Value);
 
+	// Death management
 	UFUNCTION(Server, Reliable)
 		void ServerHandleDeath();
 };
