@@ -2,14 +2,18 @@
 
 #pragma once
 
-#include <algorithm>
-
 #include "../Weapons/Weapon.h"
 
 #include "CoreMinimal.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/Character.h"
 #include "QuakePlayer.generated.h"
+
+// Base stats
+#define SPAWN_HEALTH 50
+#define SPAWN_SHIELD 25
+#define MAX_HEALTH 100
+#define MAX_SHIELD 100
 
 UCLASS()
 class QUAKE_API AQuakePlayer : public ACharacter
@@ -20,53 +24,68 @@ public:
 	// Sets default values for this character's properties
 	AQuakePlayer();
 
-public:	
+public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// Called to configure class members replication
-	virtual void GetLifetimeReplicatedProps( TArray< FLifetimeProperty > & OutLifetimeProps ) const override;
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
 public:
 	// Player health properties
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
-	int Health = 100;
+		int Health = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
-	int MaxHealth = 200;
+		int MaxHealth = MAX_HEALTH;
 
 	// Player shield properties
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
-	int Shield = 0;
+		int Shield = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
-	int MaxShield = 200;
-	
+		int MaxShield = MAX_SHIELD;
+
 	// Player first and third person weapons
-	UPROPERTY(Replicated, BlueprintReadWrite, Category="Weapon")
-	AWeapon *WeaponFP;
-	UPROPERTY(Replicated, BlueprintReadWrite, Category="Weapon")
-	AWeapon *WeaponTP;
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
+		AWeapon* WeaponFP;
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
+		AWeapon* WeaponTP;
 
 public:
+	// Damage management
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerTakeDamage(int amount, AController *instigatedBy, AActor *DamageCauser);
+
 	// Health management
-	UFUNCTION(BlueprintCallable, Category="Stats")
-	void AddHealth(int amount);
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void SubstractHealth(int amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerAddHealth(int amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerSubstractHealth(int amount);
+	
 
 	// Shield management
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void AddShield(int amount);
-	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void SubstractShield(int amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerAddShield(int amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerSubstractShield(int amount);
+
+protected: 
+	//Called when our Actor is destroyed during Gameplay.
+	virtual void Destroyed();
+
+	//Call Gamemode class to Restart Player Character.
+	void CallRestartPlayer();
 
 private:
 	// Inputs management
 	UFUNCTION()
-	void MoveForward(float Value);
+		void MoveForward(float Value);
 	UFUNCTION()
-	void MoveRight(float Value);
+		void MoveRight(float Value);
 	UFUNCTION()
-	void Turn(float Value);
+		void Turn(float Value);
 	UFUNCTION()
-	void LookUp(float Value);
+		void LookUp(float Value);
+
+	UFUNCTION(Server, Reliable)
+		void ServerHandleDeath();
 };

@@ -3,20 +3,20 @@
 
 #include "ShieldBonus.h"
 
-void AShieldBonus::ApplyBonus(AQuakePlayer* player)
+void AShieldBonus::ApplyBonus(AQuakePlayer* Player)
 {
 	int ShieldToAdd = GetBonusAmount();
 
-	player->AddShield(ShieldToAdd);
+	Player->ServerAddShield(ShieldToAdd);
 }
 
 float AShieldBonus::GetRespawnTime()
 {
-	return RespawnTime;
+	return !Mega ? RespawnTime : MegaRespawnTime;
 }
 
 // Returns ShieldAmount value
 int AShieldBonus::GetBonusAmount()
 {
-	return !Mega ?ShieldAmount : MegaShieldAmount;
+	return !Mega ? ShieldAmount : MegaShieldAmount;
 }

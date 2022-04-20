@@ -6,9 +6,12 @@
 #include "Bonus.h"
 #include "HealthBonus.generated.h"
 
-/**
- *
- */
+// Heal bonus stats
+#define NORMAL_HEAL 50
+#define MEGA_HEAL 75
+#define NORMAL_RESPAWN_TIME 15.0f
+#define MEGA_RESPAWN_TIME 20.0f
+
 UCLASS()
 class QUAKE_API AHealthBonus : public ABonus
 {
@@ -16,15 +19,17 @@ class QUAKE_API AHealthBonus : public ABonus
 
 public:
 	UPROPERTY(BlueprintReadOnly)
-		int HealAmount = 50;
+		int HealAmount = NORMAL_HEAL;
 	UPROPERTY(BlueprintReadOnly)
-		int MegaHealAmount = 75;
+		int MegaHealAmount = MEGA_HEAL;
 	UPROPERTY(BlueprintReadOnly)
-		float RespawnTime = 15.0f;
+		float RespawnTime = NORMAL_RESPAWN_TIME;
+	UPROPERTY(BlueprintReadOnly)
+		float MegaRespawnTime = MEGA_RESPAWN_TIME;
 
 public:
 	// Heal the player
-	virtual void ApplyBonus(AQuakePlayer* player) override;
+	virtual void ApplyBonus(AQuakePlayer* Player) override;
 
 	// Returns RespawnTime value
 	virtual float GetRespawnTime() override;
