@@ -5,7 +5,7 @@
 
 AMainMenu::AMainMenu()
 {
-	static ConstructorHelpers::FClassFinder<AHUD> MenuHUDCLass(TEXT("/Game/Blueprints/UI/Menus/HUD_MainMenu"));
+	static ConstructorHelpers::FClassFinder<AHUD> MenuHUDCLass(TEXT("/Game/Blueprints/UI/Menus/MainMenu/HUD_MainMenu"));
 	static ConstructorHelpers::FClassFinder<APlayerController> MenuControllerCLass(TEXT("/Game/Blueprints/Player/BP_MenuController"));
 	
 	if (MenuHUDCLass.Class != NULL)
