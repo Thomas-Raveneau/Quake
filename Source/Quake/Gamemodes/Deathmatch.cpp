@@ -49,6 +49,17 @@ void ADeathmatch::RestartPlayerAtPlayerStart(AController* NewPlayer, AActor* Sta
 	Super::RestartPlayerAtPlayerStart(NewPlayer, StartSpot);
 }
 
+void ADeathmatch::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
+{
+	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+
+	AActor* randomPlayerStart = GetRandomPlayerStart();
+	//AController* CharacterController = NewPlayer->GetController();
+
+	ServerDisablePlayerStart(randomPlayerStart);
+	RestartPlayerAtPlayerStart(NewPlayer, randomPlayerStart);
+}
+
 // Return one random PlayerStart in current level
 AActor* ADeathmatch::GetRandomPlayerStart()
 {

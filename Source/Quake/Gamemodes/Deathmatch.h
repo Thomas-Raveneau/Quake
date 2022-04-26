@@ -36,6 +36,8 @@ protected:
 	// Tries to Spawn the player's pawn
 	virtual void RestartPlayerAtPlayerStart(AController* NewPlayer, AActor* PlayerStart) override;
 
+	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
+
 	// Return one random PlayerStart in current level
 	UFUNCTION()
 		AActor* GetRandomPlayerStart();
