@@ -16,11 +16,11 @@
 	"Plugins": [
 		{
 			"Name": "AdvancedSessions",
-			"Enabled": true
+			"Enabled": false
 		},
 		{
 			"Name": "AdvancedSteamSessions",
-			"Enabled": true
+			"Enabled": false
 		}
 	]
 }
