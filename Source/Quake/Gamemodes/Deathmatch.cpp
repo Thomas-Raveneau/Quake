@@ -11,12 +11,16 @@ ADeathmatch::ADeathmatch()
 {
 	// Set default pawn class and HUD class
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Player/BP_Player"));
-	static ConstructorHelpers::FClassFinder<AHUD> PlayerHUDCLass(TEXT("/Game/Blueprints/UI/HUD_Player"));
-
+	static ConstructorHelpers::FClassFinder<AHUD> PlayerHUDCLass(TEXT("/Game/Blueprints/UI/HUD/HUD_Player"));
+	static ConstructorHelpers::FClassFinder<APlayerController> GameControllerCLass(TEXT("/Game/Blueprints/Player/BP_GameController"));
+	bUseSeamlessTravel = true;
+	
 	if (PlayerPawnBPClass.Class != NULL)
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	if (PlayerHUDCLass.Class != NULL)
 		HUDClass = PlayerHUDCLass.Class;
+	if (GameControllerCLass.Class != NULL)
+		PlayerControllerClass = GameControllerCLass.Class;
 }
 
 // Respawn the player

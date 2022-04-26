@@ -50,7 +50,7 @@ public:
 
 	// Called in derived class to get RespawnTime value
 	UFUNCTION(BlueprintCallable)
-		virtual float GetRespawnTime() PURE_VIRTUAL_NUM(ABonus::SetBonusAmount);
+		virtual float GetRespawnTime() PURE_VIRTUAL_NUM(ABonus::GetRespawnTime);
 
 	// Called in derived class to get BonusAmount value
 	UFUNCTION(BlueprintCallable)
