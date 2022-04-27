@@ -4,6 +4,9 @@
 
 #include "../Weapons/Weapon.h"
 #include "../Weapons/Projectile.h"
+#include "../Gamemodes/Deathmatch.h"
+#include "../Gamemodes/DeathmatchState.h"
+
 
 #include "CoreMinimal.h"
 #include "Net/UnrealNetwork.h"
@@ -93,7 +96,7 @@ public:
 
 	// Spawn projectile of current weapon
 	UFUNCTION(Server, Reliable)
-		void ServerSpawnProjectile(FTransform ProjectileTransform);
+		void ServerSpawnProjectile(FTransform ProjectileTransform, AActor* ProjectileOwner);
 
 protected:
 	//Called when our Actor is destroyed during Gameplay.
@@ -115,5 +118,5 @@ private:
 
 	// Death management
 	UFUNCTION(Server, Reliable)
-		void ServerHandleDeath();
+		void ServerHandleDeath(AController* instigatedBy);
 };

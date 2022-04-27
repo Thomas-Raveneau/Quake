@@ -21,6 +21,8 @@ ADeathmatch::ADeathmatch()
 		HUDClass = PlayerHUDCLass.Class;
 	if (GameControllerCLass.Class != NULL)
 		PlayerControllerClass = GameControllerCLass.Class;
+	GameStateClass = ADeathmatchState::StaticClass();
+	PlayerStateClass = ADeathmatchPlayerState::StaticClass();
 }
 
 // Respawn the player
