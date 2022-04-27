@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "QuakePlayer.h"
-#include "../Gamemodes/Deathmatch.h"
 
 // Sets default values
 AQuakePlayer::AQuakePlayer()
@@ -26,8 +25,6 @@ void AQuakePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AQuakePlayer::Jump);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::StopJumping);
-
-	PlayerInputComponent->BindAction(TEXT("RespawnDebug"), IE_Pressed, this, &AQuakePlayer::ServerHandleDeath);
 }
 
 // Called to configure class members replication
@@ -73,7 +70,7 @@ void AQuakePlayer::ServerTakeDamage_Implementation(int amount, AController* inst
 
 	// Check if player is dead
 	if (Health == 0) {
-		ServerHandleDeath();
+		ServerHandleDeath(instigatedBy);
 	}
 }
 
@@ -116,20 +113,20 @@ void AQuakePlayer::Shoot(FVector CameraForwardVector, FRotator CameraRotation)
 	if (AmmoRocket > 0) {
 		FTransform rocketTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
 		
-		ServerSpawnProjectile(rocketTransform);
+		ServerSpawnProjectile(rocketTransform, this);
 		ServerSubstractRocket(1);
 	}
 }
 
 // Spawn projectile of current weapon
-void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTransform)
+void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTransform, AActor* ProjectileOwner)
 {
 	if (RocketActor) 
 	{
 		if (UWorld* World = GetWorld())
 		{
 			FActorSpawnParameters spawnParams;
-			spawnParams.Owner = this;
+			spawnParams.Owner = ProjectileOwner;
 
 			World->SpawnActor<AActor>(RocketActor, ProjectileTransform, spawnParams);
 		}
@@ -181,10 +178,11 @@ void AQuakePlayer::Destroyed()
 	}
 }
 
-void AQuakePlayer::ServerHandleDeath_Implementation()
+void AQuakePlayer::ServerHandleDeath_Implementation(AController* instigatedBy)
 {
 	//Get a reference to the Pawn Controller.
 	AController* ControllerRef = GetController();
+
 
 	//Destroy the Player.   
 	Destroy();
@@ -192,9 +190,16 @@ void AQuakePlayer::ServerHandleDeath_Implementation()
 	//Get the World and GameMode in the world to invoke its restart player function.
 	if (UWorld* World = GetWorld())
 	{
+		if (ADeathmatchState* GameState = Cast<ADeathmatchState>(World->GetGameState()))
+		{
+			GameState->ServerHandleKill(instigatedBy, ControllerRef);
+		}
+
+
 		if (ADeathmatch* GameMode = Cast<ADeathmatch>(World->GetAuthGameMode()))
 		{
 			GameMode->RespawnPlayer(ControllerRef);
 		}
+
 	}
 }

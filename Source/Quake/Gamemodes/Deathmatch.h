@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "DeathmatchState.h"
+#include "DeathmatchPlayerState.h"
 
 #include "CoreMinimal.h"
 #include "UObject/ConstructorHelpers.h"
