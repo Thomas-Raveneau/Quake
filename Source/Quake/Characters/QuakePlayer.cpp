@@ -116,7 +116,7 @@ void AQuakePlayer::ServerSubstractRocket_Implementation(int amount)
 // Shooting management
 void AQuakePlayer::Shoot(FVector CameraForwardVector, FRotator CameraRotation)
 {
-	if (AmmoRocket > 0) {
+	if (AmmoRocket > 0 && WeaponFP->CanShoot) {
 		FTransform rocketTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
 		
 		ServerSpawnProjectile(rocketTransform, this);
