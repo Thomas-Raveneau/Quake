@@ -10,7 +10,16 @@ AWeapon::AWeapon()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	CanShoot = true;
+}
 
+// Called to configure class members replication
+void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AWeapon, CanShoot);
+	
 }
 
 // Makes the weapon shoot
@@ -22,6 +31,14 @@ FTransform AWeapon::Shoot(FVector CameraForwardVector, FRotator CameraRotation)
 	const FVector ProjectileSpawnLocation = MuzzleLocation;
 	const FRotator ProjectileSpawnRotation = UKismetMathLibrary::GetDirectionUnitVector(MuzzleLocation, ShootingTrajectory.ImpactPoint).Rotation();
 	const FTransform ProjectileSpawnTransform = FTransform(ProjectileSpawnRotation, ProjectileSpawnLocation);
+
+	const float FireRate = GetFireRate();
+
+	if (FireRate > 0) 
+	{
+		CanShoot = false;
+		GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &AWeapon::HandleFireRateTimerEnd, FireRate, false, FireRate);
+	}
 
 	return ProjectileSpawnTransform;
 }
@@ -56,4 +73,9 @@ FHitResult AWeapon::GetShootingTrajectory(FVector MuzzleLocation, FVector Camera
 	//DrawDebugLine(GetWorld(), MuzzleHit.TraceStart, MuzzleHit.ImpactPoint, FColor::Red, true, 2.0f);
 
 	return MuzzleHit;
+}
+
+void AWeapon::HandleFireRateTimerEnd()
+{
+	CanShoot = true;
 }

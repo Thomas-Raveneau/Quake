@@ -2,3 +2,9 @@
 
 
 #include "RocketLauncher.h"
+
+// Returns fire rate value
+float ARocketLauncher::GetFireRate()
+{
+	return FireRate;
+}
