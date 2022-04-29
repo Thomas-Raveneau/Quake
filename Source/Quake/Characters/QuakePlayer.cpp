@@ -23,6 +23,10 @@ void AQuakePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AQuakePlayer::Turn);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AQuakePlayer::LookUp);
 
+	PlayerInputComponent->BindAxis(TEXT("SwitchNextWeapon"), this, &AQuakePlayer::LookUp);
+	PlayerInputComponent->BindAxis(TEXT("SwitchPreviousWeapon"), this, &AQuakePlayer::LookUp);
+
+
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AQuakePlayer::Jump);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::StopJumping);
 }
@@ -34,6 +38,8 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 	DOREPLIFETIME(AQuakePlayer, WeaponFP);
 	DOREPLIFETIME(AQuakePlayer, WeaponTP);
+	DOREPLIFETIME(AQuakePlayer, SecondaryWeaponFP);
+	DOREPLIFETIME(AQuakePlayer, SecondaryWeaponTP);
 	DOREPLIFETIME(AQuakePlayer, Health);
 	DOREPLIFETIME(AQuakePlayer, Shield);
 	DOREPLIFETIME(AQuakePlayer, AmmoRocket);

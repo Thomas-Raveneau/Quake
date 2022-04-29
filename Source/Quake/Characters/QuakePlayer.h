@@ -22,6 +22,12 @@
 #define SPAWN_ROCKET 15
 #define MAX_ROCKET 30
 
+UENUM(BlueprintType)
+enum class EWeapon : uint8 {
+	T_RocketLauncher	UMETA(DisplayName="Rocket_Launcher"),
+	T_LaserGun			UMETA(DisplayName = "Laser_Gun"),
+};
+
 UCLASS()
 class QUAKE_API AQuakePlayer : public ACharacter
 {
@@ -56,6 +62,11 @@ public:
 		AWeapon* WeaponFP;
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
 		AWeapon* WeaponTP;
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
+		AWeapon* SecondaryWeaponFP;
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
+		AWeapon* SecondaryWeaponTP;
+
 
 	// Player ammos
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
