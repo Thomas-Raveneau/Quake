@@ -4,9 +4,11 @@
 
 #include "DeathmatchState.h"
 #include "DeathmatchPlayerState.h"
+#include "../Characters/PlayerGameController.h"
 
 #include "CoreMinimal.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Net/UnrealNetwork.h"
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/HUD.h"
 #include "GameFramework/Character.h"
@@ -22,14 +24,24 @@ class QUAKE_API ADeathmatch : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintReadWrite, Replicated)
+		TArray<APlayerGameController*> PlayersInGame;
+
+public:
 	// Constuctor
 	ADeathmatch();
+
+	// Called to configure class members replication
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
 public:
 	const FOnPlayerDiedSignature& GetOnPlayerDied() const { return OnPlayerDied; }
 
 	// Respawn the player
 	void RespawnPlayer(AController* NewPlayer);
+	
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void Logout(AController* ExitingController) override;
 
 protected:
 	// Init on first frame
@@ -56,6 +68,7 @@ protected:
 	UFUNCTION()
 		virtual void PlayerDied(ACharacter* Character);
 
+protected:
 	// Signature to bind delegate
 	UPROPERTY()
 		FOnPlayerDiedSignature OnPlayerDied;

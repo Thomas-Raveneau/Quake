@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "PlayerGameController.h"
 #include "../Weapons/Weapon.h"
 #include "../Weapons/Projectile.h"
 #include "../Gamemodes/Deathmatch.h"

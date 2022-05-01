@@ -12,17 +12,24 @@ ADeathmatch::ADeathmatch()
 	// Set default pawn class and HUD class
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Player/BP_Player"));
 	static ConstructorHelpers::FClassFinder<AHUD> PlayerHUDCLass(TEXT("/Game/Blueprints/UI/HUD/HUD_Player"));
-	static ConstructorHelpers::FClassFinder<APlayerController> GameControllerCLass(TEXT("/Game/Blueprints/Player/BP_GameController"));
-	//bUseSeamlessTravel = true;
+	bUseSeamlessTravel = true;
 	
 	if (PlayerPawnBPClass.Class != NULL)
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	if (PlayerHUDCLass.Class != NULL)
 		HUDClass = PlayerHUDCLass.Class;
-	if (GameControllerCLass.Class != NULL)
-		PlayerControllerClass = GameControllerCLass.Class;
+
+	PlayerControllerClass = APlayerGameController::StaticClass();
 	GameStateClass = ADeathmatchState::StaticClass();
 	PlayerStateClass = ADeathmatchPlayerState::StaticClass();
+}
+
+// Called to configure class members replication
+void ADeathmatch::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ADeathmatch, PlayersInGame);
 }
 
 // Respawn the player
@@ -31,6 +38,25 @@ void ADeathmatch::RespawnPlayer(AController* NewPlayer)
 	AActor* randomPlayerStart = GetRandomPlayerStart();
 
 	RestartPlayerAtPlayerStart(NewPlayer, randomPlayerStart);
+}
+
+void ADeathmatch::PostLogin(APlayerController* NewPlayer)
+{
+	Super::PostLogin(NewPlayer);
+
+	//PlayersInGame.Add(Cast<APlayerGameController> NewPlayer);
+	PlayersInGame.Add(Cast<APlayerGameController>(NewPlayer));
+}
+
+void ADeathmatch::Logout(AController* ExitingController)
+{
+	Super::Logout(ExitingController);
+
+	ADeathmatchState * DeathmatchState = Cast<ADeathmatchState>(GetWorld()->GetGameState());
+	PlayersInGame.Remove(Cast<APlayerGameController>(ExitingController));
+
+	if (PlayersInGame.Num() == 0)
+		DeathmatchState->ServerHandleGameEnd();
 }
 
 // Init on first frame

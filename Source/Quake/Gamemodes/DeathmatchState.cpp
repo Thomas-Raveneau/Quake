@@ -25,7 +25,5 @@ void ADeathmatchState::ServerHandleKill_Implementation(AController* Killer, ACon
 
 void ADeathmatchState::ServerHandleGameEnd_Implementation()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, TEXT("GAME END"));
-
 	GetWorld()->ServerTravel(TEXT("/Game/Levels/SessionLobby"));
 }
