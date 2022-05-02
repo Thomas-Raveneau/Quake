@@ -206,6 +206,5 @@ void AQuakePlayer::ServerHandleDeath_Implementation(AController* instigatedBy)
 		{
 			GameMode->RespawnPlayer(ControllerRef);
 		}
-
 	}
 }
