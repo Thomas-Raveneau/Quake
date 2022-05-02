@@ -5,12 +5,24 @@
 
 APlayerGameController::APlayerGameController()
 {
-	
+
 }
 
-void APlayerGameController::BeginPlay()
+void APlayerGameController::SetupInputComponent()
 {
-	Super::BeginPlay();
+	Super::SetupInputComponent();
 
-	SetInputMode(FInputModeGameOnly());
+	FInputModeGameOnly InputMode;
+
+	SetInputMode(InputMode);
+	SetShowMouseCursor(false);
+}
+
+void APlayerGameController::Tick(float DeltaSeconds)
+{
+	int x = 0;
+	int y = 0;
+
+	GetViewportSize(x, y);
+	SetMouseLocation(x / 2, y / 2);
 }
