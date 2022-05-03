@@ -8,6 +8,15 @@ APlayerGameController::APlayerGameController()
 
 }
 
+void APlayerGameController::BeginPlay()
+{
+	if (!GetWorld()->IsServer())
+	{
+		FSlateApplication::Get().OnApplicationActivationStateChanged()
+			.AddUObject(this, &APlayerGameController::OnWindowFocusChanged);
+	}
+}
+
 void APlayerGameController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -16,13 +25,21 @@ void APlayerGameController::SetupInputComponent()
 
 	SetInputMode(InputMode);
 	SetShowMouseCursor(false);
+	IsWindowFocused = true;
 }
 
 void APlayerGameController::Tick(float DeltaSeconds)
 {
-	int x = 0;
-	int y = 0;
+	if (IsWindowFocused) {
+		int x = 0;
+		int y = 0;
 
-	GetViewportSize(x, y);
-	SetMouseLocation(x / 2, y / 2);
+		GetViewportSize(x, y);
+		SetMouseLocation(x / 2, y / 2);
+	}
+}
+
+void APlayerGameController::OnWindowFocusChanged(bool IsFocused)
+{
+	IsWindowFocused = IsFocused;
 }
