@@ -10,6 +10,8 @@ APlayerGameController::APlayerGameController()
 
 void APlayerGameController::BeginPlay()
 {
+	Super::BeginPlay();
+
 	if (!GetWorld()->IsServer())
 	{
 		FSlateApplication::Get().OnApplicationActivationStateChanged()
@@ -30,6 +32,7 @@ void APlayerGameController::SetupInputComponent()
 
 void APlayerGameController::Tick(float DeltaSeconds)
 {
+	return;
 	if (IsWindowFocused) {
 		int x = 0;
 		int y = 0;

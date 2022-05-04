@@ -22,6 +22,8 @@ ADeathmatch::ADeathmatch()
 	PlayerControllerClass = APlayerGameController::StaticClass();
 	GameStateClass = ADeathmatchState::StaticClass();
 	PlayerStateClass = ADeathmatchPlayerState::StaticClass();
+
+	UE_LOG(LogClass, Log, TEXT("TESTTTTTTTTTTTTTT"));
 }
 
 // Called to configure class members replication
@@ -44,7 +46,6 @@ void ADeathmatch::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	//PlayersInGame.Add(Cast<APlayerGameController> NewPlayer);
 	PlayersInGame.Add(Cast<APlayerGameController>(NewPlayer));
 }
 
@@ -52,7 +53,7 @@ void ADeathmatch::Logout(AController* ExitingController)
 {
 	Super::Logout(ExitingController);
 
-	ADeathmatchState * DeathmatchState = Cast<ADeathmatchState>(GetWorld()->GetGameState());
+	ADeathmatchState* DeathmatchState = Cast<ADeathmatchState>(GetWorld()->GetGameState());
 	PlayersInGame.Remove(Cast<APlayerGameController>(ExitingController));
 
 	if (PlayersInGame.Num() == 0)
@@ -82,7 +83,6 @@ void ADeathmatch::HandleStartingNewPlayer_Implementation(APlayerController* NewP
 	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 
 	AActor* randomPlayerStart = GetRandomPlayerStart();
-	//AController* CharacterController = NewPlayer->GetController();
 
 	ServerDisablePlayerStart(randomPlayerStart);
 	RestartPlayerAtPlayerStart(NewPlayer, randomPlayerStart);
