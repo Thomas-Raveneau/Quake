@@ -75,7 +75,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
 		int MaxAmmoRocket = MAX_ROCKET;
 
-private:
+protected:
+	UPROPERTY(BlueprintReadOnly)
+		bool InputsEnabled;
+
+private:	
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<AActor> RocketActor;
 
@@ -117,6 +121,9 @@ protected:
 	//Call Gamemode class to Restart Player Character.
 	void CallRestartPlayer();
 
+	UFUNCTION(BlueprintCallable)
+		void SetInputsEnabled(bool Enabled);
+
 private:
 	// Inputs management
 	UFUNCTION()
@@ -127,6 +134,10 @@ private:
 		void Turn(float Value);
 	UFUNCTION()
 		void LookUp(float Value);
+	UFUNCTION()
+		void JumpStart();
+	UFUNCTION()
+		void JumpStop();
 
 	// Death management
 	UFUNCTION(Server, Reliable)

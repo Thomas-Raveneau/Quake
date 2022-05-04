@@ -7,7 +7,6 @@ AMainMenu::AMainMenu()
 {
 	static ConstructorHelpers::FClassFinder<AHUD> MenuHUDClass(TEXT("/Game/Blueprints/UI/Menus/MainMenu/HUD_MainMenu"));
 	static ConstructorHelpers::FClassFinder<APlayerController> MenuControllerClass(TEXT("/Game/Blueprints/Player/BP_MenuController"));
-	//static ConstructorHelpers::FClassFinder<AGameStateBase> MenuGameStateClass(TEXT("/Game/Blueprints/Game/GS_GameLobby"));
 	
 	if (MenuHUDClass.Class != NULL)
 	{
@@ -17,8 +16,4 @@ AMainMenu::AMainMenu()
 	{
 		PlayerControllerClass = MenuControllerClass.Class;
 	}
-	/*if (MenuGameStateClass.Class != NULL)
-	{
-		GameStateClass = MenuGameStateClass.Class;
-	}*/
 }

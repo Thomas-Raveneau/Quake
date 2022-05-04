@@ -8,6 +8,7 @@ AQuakePlayer::AQuakePlayer()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
+	InputsEnabled = false;
 
 	ServerAddHealth(SPAWN_HEALTH);
 	ServerAddRocket(SPAWN_ROCKET);
@@ -27,8 +28,8 @@ void AQuakePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("SwitchPreviousWeapon"), this, &AQuakePlayer::LookUp);
 
 
-	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AQuakePlayer::Jump);
-	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::StopJumping);
+	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AQuakePlayer::JumpStart);
+	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::JumpStop);
 }
 
 // Called to configure class members replication
@@ -139,25 +140,59 @@ void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTra
 	}
 }
 
+void AQuakePlayer::SetInputsEnabled(bool Enabled)
+{
+	InputsEnabled = Enabled;
+}
+
 // Inputs management
 void AQuakePlayer::MoveForward(float Value)
 {
-	AddMovementInput(GetActorForwardVector(), Value);
+	if (InputsEnabled)
+	{
+		AddMovementInput(GetActorForwardVector(), Value);
+	}
 }
 
 void AQuakePlayer::MoveRight(float Value)
 {
-	AddMovementInput(GetActorRightVector(), Value);
+	if (InputsEnabled)
+	{
+		AddMovementInput(GetActorRightVector(), Value);
+	}
 }
 
 void AQuakePlayer::Turn(float Value)
 {
-	AddControllerYawInput(Value);
+	if (InputsEnabled)
+	{
+		AddControllerYawInput(Value);
+	}
 }
 
 void AQuakePlayer::LookUp(float Value)
 {
-	AddControllerPitchInput(Value);
+	if (InputsEnabled)
+	{
+		AddControllerPitchInput(Value);
+
+	}
+}
+
+void AQuakePlayer::JumpStart()
+{
+	if (InputsEnabled)
+	{
+		Jump();
+	}
+}
+
+void AQuakePlayer::JumpStop()
+{
+	if (InputsEnabled)
+	{
+		StopJumping();
+	}
 }
 
 // Death management
