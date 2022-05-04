@@ -5,15 +5,20 @@
 
 AMainMenu::AMainMenu()
 {
-	static ConstructorHelpers::FClassFinder<AHUD> MenuHUDCLass(TEXT("/Game/Blueprints/UI/Menus/MainMenu/HUD_MainMenu"));
-	static ConstructorHelpers::FClassFinder<APlayerController> MenuControllerCLass(TEXT("/Game/Blueprints/Player/BP_MenuController"));
+	static ConstructorHelpers::FClassFinder<AHUD> MenuHUDClass(TEXT("/Game/Blueprints/UI/Menus/MainMenu/HUD_MainMenu"));
+	static ConstructorHelpers::FClassFinder<APlayerController> MenuControllerClass(TEXT("/Game/Blueprints/Player/BP_MenuController"));
+	//static ConstructorHelpers::FClassFinder<AGameStateBase> MenuGameStateClass(TEXT("/Game/Blueprints/Game/GS_GameLobby"));
 	
-	if (MenuHUDCLass.Class != NULL)
+	if (MenuHUDClass.Class != NULL)
 	{
-		HUDClass = MenuHUDCLass.Class;
+		HUDClass = MenuHUDClass.Class;
 	}
-	if (MenuControllerCLass.Class != NULL) 
+	if (MenuControllerClass.Class != NULL) 
 	{
-		PlayerControllerClass = MenuControllerCLass.Class;
+		PlayerControllerClass = MenuControllerClass.Class;
 	}
+	/*if (MenuGameStateClass.Class != NULL)
+	{
+		GameStateClass = MenuGameStateClass.Class;
+	}*/
 }

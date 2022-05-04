@@ -22,8 +22,6 @@ ADeathmatch::ADeathmatch()
 	PlayerControllerClass = APlayerGameController::StaticClass();
 	GameStateClass = ADeathmatchState::StaticClass();
 	PlayerStateClass = ADeathmatchPlayerState::StaticClass();
-
-	UE_LOG(LogClass, Log, TEXT("TESTTTTTTTTTTTTTT"));
 }
 
 // Called to configure class members replication
