@@ -140,7 +140,6 @@ void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTra
 void AQuakePlayer::SetInputsEnabled(bool Enabled)
 {
 	InputsEnabled = Enabled;
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, TEXT("HEREEE"));
 }
 
 // Inputs management
