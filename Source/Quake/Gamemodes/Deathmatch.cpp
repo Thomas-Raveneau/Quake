@@ -13,7 +13,7 @@ ADeathmatch::ADeathmatch()
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Player/BP_Player"));
 	static ConstructorHelpers::FClassFinder<AHUD> PlayerHUDCLass(TEXT("/Game/Blueprints/UI/HUD/HUD_Player"));
 	bUseSeamlessTravel = true;
-	
+
 	if (PlayerPawnBPClass.Class != NULL)
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	if (PlayerHUDCLass.Class != NULL)
@@ -51,10 +51,26 @@ void ADeathmatch::Logout(AController* ExitingController)
 {
 	Super::Logout(ExitingController);
 
+	APlayerGameController* ExitingPlayer = Cast<APlayerGameController>(ExitingController);
 	ADeathmatchState* DeathmatchState = Cast<ADeathmatchState>(GetWorld()->GetGameState());
-	PlayersInGame.Remove(Cast<APlayerGameController>(ExitingController));
 
-	if (PlayersInGame.Num() == 0)
+	PlayersInGame.Empty();
+	if (UWorld* world = GetWorld())
+	{
+		for (FConstPlayerControllerIterator PlayerControllerIterator = world->GetPlayerControllerIterator(); PlayerControllerIterator; PlayerControllerIterator++)
+		{
+			APlayerGameController* NewPlayer = Cast<APlayerGameController>(*PlayerControllerIterator);
+
+			if (ExitingPlayer != NewPlayer)
+			{
+				PlayersInGame.Add(NewPlayer);
+			}
+		}
+	}
+
+	UE_LOG(LogClass, Log, TEXT("nb players after: %d"), PlayersInGame.Num());
+
+	if (PlayersInGame.Num() <= 1)
 		DeathmatchState->ServerHandleGameEnd();
 }
 
@@ -62,6 +78,20 @@ void ADeathmatch::Logout(AController* ExitingController)
 void ADeathmatch::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (UWorld* world = GetWorld())
+	{
+		for (FConstPlayerControllerIterator PlayerControllerIterator = world->GetPlayerControllerIterator(); PlayerControllerIterator; PlayerControllerIterator++)
+		{
+			APlayerGameController* NewPlayer = Cast<APlayerGameController>(*PlayerControllerIterator);
+
+			PlayersInGame.Add(NewPlayer);
+		}
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("nb players: %d"), PlayersInGame.Num()));
+	UE_LOG(LogClass, Log, TEXT("nb players: %d"), PlayersInGame.Num());
+	//UE_LOG(LogClass, Log, TEXT("nb players: %s"), TCHAR_TO_ANSI(*PlayersInGame[0]->GetName()));
 
 	//Bind our Player died delegate to the Gamemode's PlayerDied function.
 	if (!OnPlayerDied.IsBound())

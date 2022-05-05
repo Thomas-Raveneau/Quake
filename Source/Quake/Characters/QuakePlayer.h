@@ -114,15 +114,16 @@ public:
 	UFUNCTION(Server, Reliable)
 		void ServerSpawnProjectile(FTransform ProjectileTransform, AActor* ProjectileOwner);
 
+	// Toggle InputsEnabled
+	UFUNCTION(BlueprintCallable)
+		void SetInputsEnabled(bool Enabled);
+
 protected:
 	//Called when our Actor is destroyed during Gameplay.
 	virtual void Destroyed();
 
 	//Call Gamemode class to Restart Player Character.
 	void CallRestartPlayer();
-
-	UFUNCTION(BlueprintCallable)
-		void SetInputsEnabled(bool Enabled);
 
 private:
 	// Inputs management

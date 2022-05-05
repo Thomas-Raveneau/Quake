@@ -8,7 +8,7 @@ AQuakePlayer::AQuakePlayer()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
-	InputsEnabled = false;
+	InputsEnabled = true;
 
 	ServerAddHealth(SPAWN_HEALTH);
 	ServerAddRocket(SPAWN_ROCKET);
@@ -23,10 +23,6 @@ void AQuakePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AQuakePlayer::MoveRight);
 	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AQuakePlayer::Turn);
 	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AQuakePlayer::LookUp);
-
-	PlayerInputComponent->BindAxis(TEXT("SwitchNextWeapon"), this, &AQuakePlayer::LookUp);
-	PlayerInputComponent->BindAxis(TEXT("SwitchPreviousWeapon"), this, &AQuakePlayer::LookUp);
-
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AQuakePlayer::JumpStart);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::JumpStop);
@@ -140,9 +136,11 @@ void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTra
 	}
 }
 
+// Toggle IlayersInputs on client side
 void AQuakePlayer::SetInputsEnabled(bool Enabled)
 {
 	InputsEnabled = Enabled;
+	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, TEXT("HEREEE"));
 }
 
 // Inputs management
