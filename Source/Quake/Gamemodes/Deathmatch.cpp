@@ -12,7 +12,6 @@ ADeathmatch::ADeathmatch()
 	// Set default pawn class and HUD class
 	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/Blueprints/Player/BP_Player"));
 	static ConstructorHelpers::FClassFinder<AHUD> PlayerHUDCLass(TEXT("/Game/Blueprints/UI/HUD/HUD_Player"));
-	//bUseSeamlessTravel = true;
 
 	if (PlayerPawnBPClass.Class != NULL)
 		DefaultPawnClass = PlayerPawnBPClass.Class;
@@ -68,8 +67,6 @@ void ADeathmatch::Logout(AController* ExitingController)
 		}
 	}
 
-	UE_LOG(LogClass, Log, TEXT("nb players after: %d"), PlayersInGame.Num());
-
 	if (PlayersInGame.Num() <= 1)
 		DeathmatchState->ServerHandleGameEnd();
 }
@@ -88,10 +85,6 @@ void ADeathmatch::BeginPlay()
 			PlayersInGame.Add(NewPlayer);
 		}
 	}
-
-	GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("nb players: %d"), PlayersInGame.Num()));
-	UE_LOG(LogClass, Log, TEXT("nb players: %d"), PlayersInGame.Num());
-	//UE_LOG(LogClass, Log, TEXT("nb players: %s"), TCHAR_TO_ANSI(*PlayersInGame[0]->GetName()));
 
 	//Bind our Player died delegate to the Gamemode's PlayerDied function.
 	if (!OnPlayerDied.IsBound())
