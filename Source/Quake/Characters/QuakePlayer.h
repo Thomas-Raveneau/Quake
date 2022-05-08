@@ -16,12 +16,16 @@
 #include "QuakePlayer.generated.h"
 
 // Base stats
-#define SPAWN_HEALTH 50
-#define SPAWN_SHIELD 25
+#define SPAWN_HEALTH 100
+#define SPAWN_SHIELD 0
+
+
 #define MAX_HEALTH 100
 #define MAX_SHIELD 100
-#define SPAWN_ROCKET 15
+
+#define SPAWN_ROCKET 2
 #define SPAWN_LASER 50
+
 #define MAX_ROCKET 30
 #define MAX_LASER 100
 
@@ -48,9 +52,10 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
 public:
-	// Player Currently Equipped Weapon
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CurrentlyEquipped")
+	// Player currently equipped weapon
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "CurrentlyEquipped")
 		EWeapon CurrentlyEquipped = EWeapon::T_RocketLauncher;
+
 	// Player health properties
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
 		int Health = 0;
