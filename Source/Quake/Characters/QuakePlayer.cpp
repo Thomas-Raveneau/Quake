@@ -12,6 +12,8 @@ AQuakePlayer::AQuakePlayer()
 
 	ServerAddHealth(SPAWN_HEALTH);
 	ServerAddRocket(SPAWN_ROCKET);
+	ServerAddLaser(SPAWN_LASER);
+
 }
 
 // Called to bind functionality to input
@@ -35,11 +37,10 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 
 	DOREPLIFETIME(AQuakePlayer, WeaponFP);
 	DOREPLIFETIME(AQuakePlayer, WeaponTP);
-	DOREPLIFETIME(AQuakePlayer, SecondaryWeaponFP);
-	DOREPLIFETIME(AQuakePlayer, SecondaryWeaponTP);
 	DOREPLIFETIME(AQuakePlayer, Health);
 	DOREPLIFETIME(AQuakePlayer, Shield);
 	DOREPLIFETIME(AQuakePlayer, AmmoRocket);
+	DOREPLIFETIME(AQuakePlayer, AmmoLaser);
 }
 
 // Damage management
@@ -100,6 +101,17 @@ void AQuakePlayer::ServerSubstractShield_Implementation(int amount)
 }
 
 // Ammos management
+void AQuakePlayer::ServerAddLaser_Implementation(int amount)
+{
+	AmmoLaser = AmmoLaser + amount > MaxAmmoLaser? MaxAmmoLaser : AmmoLaser + amount;
+}
+
+void AQuakePlayer::ServerSubstractLaser_Implementation(int amount)
+{
+	AmmoRocket = AmmoLaser - amount < 0 ? 0 : AmmoLaser - amount;
+}
+
+
 void AQuakePlayer::ServerAddRocket_Implementation(int amount)
 {
 	AmmoRocket = AmmoRocket + amount > MaxAmmoRocket ? MaxAmmoRocket : AmmoRocket + amount;
@@ -113,18 +125,26 @@ void AQuakePlayer::ServerSubstractRocket_Implementation(int amount)
 // Shooting management
 void AQuakePlayer::Shoot(FVector CameraForwardVector, FRotator CameraRotation)
 {
-	if (AmmoRocket > 0 && WeaponFP->CanShoot) {
-		FTransform rocketTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
-		
-		ServerSpawnProjectile(rocketTransform, this);
-		ServerSubstractRocket(1);
-	}
+	switch (this->CurrentlyEquipped)
+	{
+		case(EWeapon::T_RocketLauncher):
+			if (AmmoRocket > 0 && WeaponFP->CanShoot) {
+				FTransform rocketTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
+				ServerSpawnProjectile(rocketTransform, this);
+				ServerSubstractRocket(1);
+			}
+		case(EWeapon::T_LaserGun):
+			if (AmmoLaser > 0 && WeaponFP->CanShoot) {
+				ServerSubstractLaser(1);
+			}
+	}	
+
 }
 
 // Spawn projectile of current weapon
 void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTransform, AActor* ProjectileOwner)
 {
-	if (RocketActor) 
+	if (RocketActor && this->CurrentlyEquipped == EWeapon::T_RocketLauncher)
 	{
 		if (UWorld* World = GetWorld())
 		{
@@ -134,6 +154,18 @@ void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTra
 			World->SpawnActor<AActor>(RocketActor, ProjectileTransform, spawnParams);
 		}
 	}
+	if (LaserActor && this->CurrentlyEquipped == EWeapon::T_LaserGun)
+	{
+		if (UWorld* World = GetWorld())
+		{
+			FActorSpawnParameters spawnParams;
+			spawnParams.Owner = ProjectileOwner;
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Definitly a laser!"));
+
+			World->SpawnActor<AActor>(LaserActor, ProjectileTransform, spawnParams);
+		}
+	}
+
 }
 
 // Toggle IlayersInputs on client side

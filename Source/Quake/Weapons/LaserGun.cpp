@@ -3,3 +3,6 @@
 
 #include "LaserGun.h"
 
+float ALaserGun::GetFireRate() {
+	return FireRate;
+}

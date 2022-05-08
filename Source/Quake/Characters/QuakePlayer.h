@@ -21,7 +21,9 @@
 #define MAX_HEALTH 100
 #define MAX_SHIELD 100
 #define SPAWN_ROCKET 15
+#define SPAWN_LASER 50
 #define MAX_ROCKET 30
+#define MAX_LASER 100
 
 UENUM(BlueprintType)
 enum class EWeapon : uint8 {
@@ -46,6 +48,9 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
 public:
+	// Player Currently Equipped Weapon
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CurrentlyEquipped")
+		EWeapon CurrentlyEquipped = EWeapon::T_RocketLauncher;
 	// Player health properties
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Stats")
 		int Health = 0;
@@ -63,17 +68,17 @@ public:
 		AWeapon* WeaponFP;
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
 		AWeapon* WeaponTP;
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
-		AWeapon* SecondaryWeaponFP;
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
-		AWeapon* SecondaryWeaponTP;
-
 
 	// Player ammos
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
 		int AmmoRocket = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
 		int MaxAmmoRocket = MAX_ROCKET;
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Weapon")
+		int AmmoLaser = 0;
+	UPROPERTY(BlueprintReadOnly, Category = "Stats")
+		int MaxAmmoLaser = MAX_LASER;
+
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
@@ -82,6 +87,8 @@ protected:
 private:	
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<AActor> RocketActor;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<AActor> LaserActor;
 
 public:
 	// Damage management
@@ -105,6 +112,11 @@ public:
 		void ServerAddRocket(int amount);
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 		void ServerSubstractRocket(int amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerAddLaser(int amount);
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerSubstractLaser(int amount);
+
 
 	// Shooting management
 	UFUNCTION(BlueprintCallable)
