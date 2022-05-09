@@ -44,6 +44,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		FVector GetMuzzleLocation();
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void SetWeaponVisibility(bool FPSView);
+
 	UFUNCTION(BlueprintCallable)
 		virtual float GetFireRate() PURE_VIRTUAL_NUM(AWeapon::GetFireRate);
 

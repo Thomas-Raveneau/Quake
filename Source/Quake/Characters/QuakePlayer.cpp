@@ -171,14 +171,33 @@ void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTra
 			FActorSpawnParameters spawnParams;
 			spawnParams.Owner = ProjectileOwner;
 
-			AActor *spawnedActor = World->SpawnActor<AActor>(LaserActor, ProjectileTransform, spawnParams);
-			USceneComponent* LaserGunScene = WeaponFP->GetRootComponent();
+			AActor* spawnedActor = World->SpawnActor<AActor>(LaserActor, ProjectileTransform, spawnParams);
+			//TArray<UActorComponent*> LaserGunMeshes = WeaponFP->GetComponentsByTag(USkeletalMeshComponent::StaticClass(), FName("WeaponMesh"));
 
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Laser"));
-			 
-			spawnedActor->AttachToComponent(LaserGunScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale, "MuzzleBone");
+			TArray<USkeletalMeshComponent*> SkeletalComps;
+			WeaponFP->GetComponents<USkeletalMeshComponent>(SkeletalComps);
+
+			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("nb: %d"), SkeletalComps.Num()));
+
+			for (int i = 0; i != SkeletalComps.Num(); i++)
+			{
+				
+				spawnedActor->AttachToComponent(SkeletalComps[i], FAttachmentTransformRules::SnapToTargetIncludingScale, "Muzzle_Bone");
+				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("name: %s"), *SkeletalComps[i]->GetName()));
+
+				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("nb tags: %d"), SkeletalComps[i]->ComponentTags.Num()));
+
+				for (int x = 0; x != SkeletalComps[i]->ComponentTags.Num(); x++)
+				{
+					GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("tag: %s"), *SkeletalComps[i]->ComponentTags[x].ToString()));
+				}
+
+				if (SkeletalComps[i]->ComponentTags.Contains(TEXT("WeaponMesh")))
+				{
+					
+				}
+			}
 		}
-		
 	}
 }
 
