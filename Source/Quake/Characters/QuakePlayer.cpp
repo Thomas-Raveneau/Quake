@@ -43,6 +43,8 @@ void AQuakePlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLife
 	DOREPLIFETIME(AQuakePlayer, Shield);
 	DOREPLIFETIME(AQuakePlayer, AmmoRocket);
 	DOREPLIFETIME(AQuakePlayer, AmmoLaser);
+	DOREPLIFETIME(AQuakePlayer, CurrentLaser);
+	DOREPLIFETIME(AQuakePlayer, IsShootingLaser);
 }
 
 // Damage management
@@ -166,38 +168,36 @@ void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTra
 
 			World->SpawnActor<AActor>(RocketActor, ProjectileTransform, spawnParams);
 		}
-		if (LaserActor && this->CurrentlyEquipped == EWeapon::T_LaserGun)
+		if (LaserActor && this->CurrentlyEquipped == EWeapon::T_LaserGun && !IsShootingLaser)
 		{
 			FActorSpawnParameters spawnParams;
 			spawnParams.Owner = ProjectileOwner;
 
-			AActor* spawnedActor = World->SpawnActor<AActor>(LaserActor, ProjectileTransform, spawnParams);
-			//TArray<UActorComponent*> LaserGunMeshes = WeaponFP->GetComponentsByTag(USkeletalMeshComponent::StaticClass(), FName("WeaponMesh"));
-
+			
 			TArray<USkeletalMeshComponent*> SkeletalComps;
-			WeaponFP->GetComponents<USkeletalMeshComponent>(SkeletalComps);
 
-			GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("nb: %d"), SkeletalComps.Num()));
+			WeaponFP->GetComponents<USkeletalMeshComponent>(SkeletalComps);
 
 			for (int i = 0; i != SkeletalComps.Num(); i++)
 			{
-				
-				spawnedActor->AttachToComponent(SkeletalComps[i], FAttachmentTransformRules::SnapToTargetIncludingScale, "Muzzle_Bone");
-				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("name: %s"), *SkeletalComps[i]->GetName()));
-
-				GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("nb tags: %d"), SkeletalComps[i]->ComponentTags.Num()));
-
-				for (int x = 0; x != SkeletalComps[i]->ComponentTags.Num(); x++)
-				{
-					GEngine->AddOnScreenDebugMessage(-1, 10, FColor::Red, FString::Printf(TEXT("tag: %s"), *SkeletalComps[i]->ComponentTags[x].ToString()));
-				}
-
 				if (SkeletalComps[i]->ComponentTags.Contains(TEXT("WeaponMesh")))
 				{
-					
+					CurrentLaser = World->SpawnActor<AActor>(LaserActor, ProjectileTransform, spawnParams);
+					CurrentLaser->AttachToComponent(SkeletalComps[i], FAttachmentTransformRules::SnapToTargetIncludingScale, "Muzzle_Bone");
+					IsShootingLaser = true;
 				}
 			}
 		}
+	}
+}
+
+void AQuakePlayer::ServerDestroyLaser_Implementation()
+{
+	if (CurrentLaser)
+	{
+		CurrentLaser->Destroy();
+		CurrentLaser = nullptr;
+		IsShootingLaser = false;
 	}
 }
 

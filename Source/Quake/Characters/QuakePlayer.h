@@ -31,7 +31,7 @@
 
 UENUM(BlueprintType)
 enum class EWeapon : uint8 {
-	T_RocketLauncher	UMETA(DisplayName="Rocket_Launcher"),
+	T_RocketLauncher	UMETA(DisplayName = "Rocket_Launcher"),
 	T_LaserGun			UMETA(DisplayName = "Laser_Gun"),
 };
 
@@ -83,17 +83,20 @@ public:
 		int AmmoLaser = 0;
 	UPROPERTY(BlueprintReadOnly, Category = "Stats")
 		int MaxAmmoLaser = MAX_LASER;
-
+	UPROPERTY(Replicated, BlueprintReadWrite)
+		bool IsShootingLaser;
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
 		bool InputsEnabled;
 
-private:	
+private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<AActor> RocketActor;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<AActor> LaserActor;
+	UPROPERTY(Replicated)
+		AActor* CurrentLaser;
 
 public:
 	// Damage management
@@ -130,6 +133,9 @@ public:
 	// Spawn projectile of current weapon
 	UFUNCTION(Server, Reliable)
 		void ServerSpawnProjectile(FTransform ProjectileTransform, AActor* ProjectileOwner);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerDestroyLaser();
 
 	// Toggle InputsEnabled
 	UFUNCTION(BlueprintCallable)
