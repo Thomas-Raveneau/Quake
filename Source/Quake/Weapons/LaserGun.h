@@ -6,7 +6,7 @@
 #include "Weapon.h"
 #include "LaserGun.generated.h"
 
-#define FIRE_RATE 0.5f
+#define FIRE_RATE 0.2f
 
 
 /**

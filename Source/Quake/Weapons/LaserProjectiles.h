@@ -6,7 +6,7 @@
 #include "Projectile.h"
 #include "LaserProjectiles.generated.h"
 
-#define LASER_DAMAGE 1
+#define LASER_DAMAGE 8
 
 UCLASS()
 class QUAKE_API ALaserProjectiles : public AProjectile
