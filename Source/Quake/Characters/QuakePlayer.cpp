@@ -131,28 +131,30 @@ void AQuakePlayer::Shoot(FVector CameraForwardVector, FRotator CameraRotation)
 {
 	switch (this->CurrentlyEquipped)
 	{
-	case(EWeapon::T_RocketLauncher):
-	{
-		if (AmmoRocket > 0 && WeaponFP->CanShoot)
+		case(EWeapon::T_RocketLauncher):
 		{
-			FTransform rocketTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
-			ServerSpawnProjectile(rocketTransform, this);
-			ServerSubstractRocket(1);
+			if (AmmoRocket > 0 && WeaponFP->CanShoot)
+			{
+				FTransform rocketTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
+				ServerSpawnProjectile(rocketTransform, this);
+				ServerSubstractRocket(1);
+			}
+			break;
 		}
-		break;
-	}
-	case(EWeapon::T_LaserGun):
-	{
-		if (AmmoLaser > 0 && WeaponFP->CanShoot)
+		case(EWeapon::T_LaserGun):
 		{
-			FTransform laserTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
-			ServerSpawnProjectile(laserTransform, this);
-			ServerSubstractLaser(1);
+			if (AmmoLaser > 0 && WeaponFP->CanShoot)
+			{
+				FTransform laserTransform = WeaponFP->Shoot(CameraForwardVector, CameraRotation);
+				ServerSpawnProjectile(laserTransform, this);
+				ServerSubstractLaser(1);
+			}
+			break;
 		}
-		break;
-	}
-	default:
-		break;
+		default:
+		{
+			break;
+		}
 	}
 }
 
@@ -173,7 +175,7 @@ void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTra
 			FActorSpawnParameters spawnParams;
 			spawnParams.Owner = ProjectileOwner;
 
-			
+
 			TArray<USkeletalMeshComponent*> SkeletalComps;
 
 			WeaponFP->GetComponents<USkeletalMeshComponent>(SkeletalComps);
