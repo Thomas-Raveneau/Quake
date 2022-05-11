@@ -9,7 +9,7 @@
 #include "DeathmatchState.generated.h"
 
 // Game settings
-#define GAME_DURATION 600.0f
+#define GAME_DURATION 300.0f
 
 UCLASS()
 class QUAKE_API ADeathmatchState : public AGameStateBase

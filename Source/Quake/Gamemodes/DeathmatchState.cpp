@@ -15,6 +15,7 @@ void ADeathmatchState::BeginPlay()
 	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &ADeathmatchState::ServerHandleGameEnd, GAME_DURATION, false, GAME_DURATION);
 }
 
+// Called to configure class members replication
 void ADeathmatchState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -33,7 +34,4 @@ void ADeathmatchState::ServerHandleKill_Implementation(AController* Killer, ACon
 void ADeathmatchState::ServerHandleGameEnd_Implementation()
 {
 	GetWorld()->ServerTravel(TEXT("/Game/Levels/SessionLobby"));
-	GetWorldTimerManager().GetTimerRemaining(GameTimerHandle);
 }
-
-
