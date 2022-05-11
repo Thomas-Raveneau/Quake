@@ -16,9 +16,9 @@ class QUAKE_API ADeathmatchState : public AGameStateBase
 {
 	GENERATED_BODY()
 
-private:
+public:
 	//Game timer handler
-	UPROPERTY()
+	UPROPERTY(Replicated, BlueprintReadOnly)
 		FTimerHandle GameTimerHandle;
 
 public:
@@ -26,6 +26,9 @@ public:
 	virtual ~ADeathmatchState() = default;
 
 	virtual void BeginPlay() override;
+
+	// Called to configure class members replication
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
 public:
 	UFUNCTION(Server, Reliable)

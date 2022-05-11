@@ -15,6 +15,13 @@ void ADeathmatchState::BeginPlay()
 	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &ADeathmatchState::ServerHandleGameEnd, GAME_DURATION, false, GAME_DURATION);
 }
 
+void ADeathmatchState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ADeathmatchState, GameTimerHandle);
+}
+
 void ADeathmatchState::ServerHandleKill_Implementation(AController* Killer, AController* Killed)
 {
 	Killed->GetPlayerState<ADeathmatchPlayerState>()->ServerAddDeath();
@@ -26,4 +33,7 @@ void ADeathmatchState::ServerHandleKill_Implementation(AController* Killer, ACon
 void ADeathmatchState::ServerHandleGameEnd_Implementation()
 {
 	GetWorld()->ServerTravel(TEXT("/Game/Levels/SessionLobby"));
+	GetWorldTimerManager().GetTimerRemaining(GameTimerHandle);
 }
+
+
