@@ -141,6 +141,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SetInputsEnabled(bool Enabled);
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void StartGame(float GameDuration);
+
 protected:
 	//Called when our Actor is destroyed during Gameplay.
 	virtual void Destroyed();

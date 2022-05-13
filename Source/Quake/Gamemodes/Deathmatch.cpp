@@ -71,6 +71,22 @@ void ADeathmatch::Logout(AController* ExitingController)
 		DeathmatchState->ServerHandleGameEnd();
 }
 
+void ADeathmatch::ServerStartGame_Implementation(float GameDuration)
+{
+	UE_LOG(LogClass, Log, TEXT("START GAME"));
+	for (int i = 0; i != PlayersInGame.Num(); i++)
+	{
+		UE_LOG(LogClass, Log, TEXT("OUI"));
+		AQuakePlayer* Player = Cast<AQuakePlayer>(PlayersInGame[i]->GetPawn()); // PROBLEME ICI -> FAIRE MULTICAST POUR DIRE START GAME
+		UE_LOG(LogClass, Log, TEXT("OUI OUI"));
+		if (Player)
+		{
+			UE_LOG(LogClass, Log, TEXT("OUI OUI OUI"));
+			Player->StartGame(GameDuration);
+		}
+	}
+}
+
 // Init on first frame
 void ADeathmatch::BeginPlay()
 {

@@ -4,6 +4,7 @@
 
 #include "DeathmatchState.h"
 #include "DeathmatchPlayerState.h"
+#include "../Characters/QuakePlayer.h"
 #include "../Characters/PlayerGameController.h"
 
 #include "CoreMinimal.h"
@@ -42,6 +43,9 @@ public:
 	
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void Logout(AController* ExitingController) override;
+
+	UFUNCTION(Server, Reliable)
+		void ServerStartGame(float GameDuration);
 
 protected:
 	// Init on first frame

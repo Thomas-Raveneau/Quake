@@ -3,6 +3,7 @@
 #pragma once
 
 #include "DeathmatchPlayerState.h"
+#include "Deathmatch.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
@@ -21,6 +22,9 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly)
 		FTimerHandle GameTimerHandle;
 
+	UPROPERTY(BlueprintReadOnly)
+		float GameDuration = GAME_DURATION;
+
 public:
 	ADeathmatchState();
 	virtual ~ADeathmatchState() = default;
@@ -36,4 +40,7 @@ public:
 
 	UFUNCTION(Server, Reliable)
 		void ServerHandleGameEnd();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerSetPlayerReadyToPlay(AController* PlayerReady);
 };
