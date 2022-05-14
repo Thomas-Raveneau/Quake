@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "DeathmatchPlayerState.h"
 #include "Deathmatch.h"
+#include "DeathmatchPlayerState.h"
+#include "../Characters/QuakePlayer.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
@@ -43,4 +44,7 @@ public:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 		void ServerSetPlayerReadyToPlay(AController* PlayerReady);
+
+	UFUNCTION(Server, Reliable)
+		void ServerStartGame();
 };

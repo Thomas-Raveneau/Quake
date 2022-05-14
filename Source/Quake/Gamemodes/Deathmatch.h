@@ -44,9 +44,6 @@ public:
 	virtual void PostLogin(APlayerController* NewPlayer) override;
 	virtual void Logout(AController* ExitingController) override;
 
-	UFUNCTION(Server, Reliable)
-		void ServerStartGame(float GameDuration);
-
 protected:
 	// Init on first frame
 	virtual void BeginPlay() override;
