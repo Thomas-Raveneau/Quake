@@ -22,6 +22,8 @@ public:
 	//Game timer handler
 	UPROPERTY(Replicated, BlueprintReadOnly)
 		FTimerHandle GameTimerHandle;
+	UPROPERTY()
+		FTimerHandle GameStartTimerHandle;
 
 	UPROPERTY(BlueprintReadOnly)
 		float GameDuration = GAME_DURATION;
@@ -47,4 +49,7 @@ public:
 
 	UFUNCTION(Server, Reliable)
 		void ServerStartGame();
+
+	UFUNCTION(Server, Reliable)
+		void ServerStartGameTimer();
 };

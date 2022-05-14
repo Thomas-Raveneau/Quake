@@ -76,5 +76,10 @@ void ADeathmatchState::ServerStartGame_Implementation()
 		}
 	}
 
+	GetWorldTimerManager().SetTimer(GameStartTimerHandle, this, &ADeathmatchState::ServerStartGameTimer, 3, false, 3);
+}
+
+void ADeathmatchState::ServerStartGameTimer_Implementation()
+{
 	GetWorldTimerManager().SetTimer(GameTimerHandle, this, &ADeathmatchState::ServerHandleGameEnd, GameDuration, false, GameDuration);
 }
