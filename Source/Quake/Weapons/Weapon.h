@@ -16,10 +16,13 @@ class QUAKE_API AWeapon : public AActor
 {
 	GENERATED_BODY()
 
-
 public:
 	UPROPERTY(Replicated, BlueprintReadWrite)
 		bool CanShoot;
+
+protected:
+	UPROPERTY(Replicated, BlueprintReadOnly)
+		bool InstantShootWeapon;
 
 private:
 	UPROPERTY()
@@ -50,6 +53,9 @@ public:
 		void SetWeaponVisibility(bool FPSView);
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void PlayWeaponSwapSound();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void PlayFireSound();
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
@@ -57,6 +63,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		virtual float GetFireRate() PURE_VIRTUAL_NUM(AWeapon::GetFireRate);
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerSetInstantShootWeapon(bool NewInstantShootWeapon);
 
 private:
 	UFUNCTION()

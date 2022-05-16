@@ -10,14 +10,15 @@ AWeapon::AWeapon()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	CanShoot = true;
+	CanShoot = false;
+	InstantShootWeapon = false;
 }
 
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayReloadSound();
+	PlayWeaponSwapSound();
 }
 
 // Called to configure class members replication
@@ -26,7 +27,7 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AWeapon, CanShoot);
-
+	DOREPLIFETIME(AWeapon, InstantShootWeapon);
 }
 
 // Makes the weapon shoot
@@ -74,10 +75,24 @@ FHitResult AWeapon::GetShootingTrajectory(FVector MuzzleLocation, FVector Camera
 
 	GetWorld()->LineTraceSingleByChannel(MuzzleHit, MuzzleStart, MuzzleEnd, ECC_Visibility, TraceParams);
 
-	return MuzzleHit;
+	return 
+		
+		MuzzleHit;
+}
+
+void AWeapon::ServerSetInstantShootWeapon_Implementation(bool NewInstantShootWeapon)
+{	
+	InstantShootWeapon = NewInstantShootWeapon;
 }
 
 void AWeapon::HandleFireRateTimerEnd()
 {
-	PlayReloadSound();
+	if (!InstantShootWeapon)
+	{
+		PlayReloadSound();
+	}
+	else
+	{
+		CanShoot = true;
+	}
 }

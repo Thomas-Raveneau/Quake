@@ -114,7 +114,7 @@ AActor* ADeathmatch::GetRandomPlayerStart()
 {
 	TArray<AActor*> FoundPlayerStarts;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerStart::StaticClass(), FoundPlayerStarts);
-	int randomIndex;
+	int randomIndex = 0;
 	bool playerStartFound = false;
 
 	while (!playerStartFound) {

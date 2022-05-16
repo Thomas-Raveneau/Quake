@@ -15,11 +15,14 @@ class QUAKE_API ARocketLauncher : public AWeapon
 {
 	GENERATED_BODY()
 	
+
 private:
 	UPROPERTY()
 		float FireRate = FIRE_RATE;
 
 public: 
+	ARocketLauncher();
+
 	// Returns fire rate value
 	virtual float GetFireRate() override;
 };

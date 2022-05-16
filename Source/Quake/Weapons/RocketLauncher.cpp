@@ -3,6 +3,11 @@
 
 #include "RocketLauncher.h"
 
+ARocketLauncher::ARocketLauncher()
+{
+	InstantShootWeapon = false;
+}
+
 // Returns fire rate value
 float ARocketLauncher::GetFireRate()
 {

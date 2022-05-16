@@ -22,6 +22,8 @@ private:
 		float FireRate = FIRE_RATE;
 
 public:
+	ALaserGun();
+
 	// Returns fire rate value
 	virtual float GetFireRate() override;
 	
