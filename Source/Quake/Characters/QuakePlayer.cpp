@@ -246,6 +246,7 @@ void AQuakePlayer::JumpStart()
 {
 	if (InputsEnabled)
 	{
+		PlayJumpSound();
 		Jump();
 	}
 }
