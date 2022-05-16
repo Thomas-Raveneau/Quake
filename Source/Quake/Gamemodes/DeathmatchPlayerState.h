@@ -20,6 +20,8 @@ public:
 		int killCount = 0;
 	UPROPERTY(Replicated, BlueprintReadWrite)
 		int deathCount = 0;
+	UPROPERTY(Replicated, BlueprintReadWrite)
+		bool ReadyToPlay = false;
 	
 public:
 	ADeathmatchPlayerState();

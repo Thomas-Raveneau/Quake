@@ -14,6 +14,7 @@ void ADeathmatchPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty
 
 	DOREPLIFETIME(ADeathmatchPlayerState, killCount);
 	DOREPLIFETIME(ADeathmatchPlayerState, deathCount);
+	DOREPLIFETIME(ADeathmatchPlayerState, ReadyToPlay);
 }
 
 void ADeathmatchPlayerState::ServerAddKill_Implementation()

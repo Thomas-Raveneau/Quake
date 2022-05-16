@@ -2,7 +2,9 @@
 
 #pragma once
 
+#include "Deathmatch.h"
 #include "DeathmatchPlayerState.h"
+#include "../Characters/QuakePlayer.h"
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
@@ -20,6 +22,11 @@ public:
 	//Game timer handler
 	UPROPERTY(Replicated, BlueprintReadOnly)
 		FTimerHandle GameTimerHandle;
+	UPROPERTY()
+		FTimerHandle GameStartTimerHandle;
+
+	UPROPERTY(BlueprintReadOnly)
+		float GameDuration = GAME_DURATION;
 
 public:
 	ADeathmatchState();
@@ -36,4 +43,13 @@ public:
 
 	UFUNCTION(Server, Reliable)
 		void ServerHandleGameEnd();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ServerSetPlayerReadyToPlay(AController* PlayerReady);
+
+	UFUNCTION(Server, Reliable)
+		void ServerStartGame();
+
+	UFUNCTION(Server, Reliable)
+		void ServerStartGameTimer();
 };

@@ -4,6 +4,7 @@
 
 #include "DeathmatchState.h"
 #include "DeathmatchPlayerState.h"
+#include "../Characters/QuakePlayer.h"
 #include "../Characters/PlayerGameController.h"
 
 #include "CoreMinimal.h"
