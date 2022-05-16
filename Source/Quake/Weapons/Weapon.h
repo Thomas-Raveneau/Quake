@@ -47,6 +47,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void SetWeaponVisibility(bool FPSView);
 
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void PlayFireSound();
+
 	UFUNCTION(BlueprintCallable)
 		virtual float GetFireRate() PURE_VIRTUAL_NUM(AWeapon::GetFireRate);
 

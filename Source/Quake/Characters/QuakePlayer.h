@@ -23,7 +23,7 @@
 #define MAX_HEALTH 100
 #define MAX_SHIELD 100
 
-#define SPAWN_ROCKET 2
+#define SPAWN_ROCKET 30
 #define SPAWN_LASER 50
 
 #define MAX_ROCKET 30

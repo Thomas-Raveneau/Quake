@@ -37,6 +37,7 @@ FTransform AWeapon::Shoot(FVector CameraForwardVector, FRotator CameraRotation)
 	if (FireRate > 0) 
 	{
 		CanShoot = false;
+		PlayFireSound();
 		GetWorldTimerManager().SetTimer(FireRateTimerHandle, this, &AWeapon::HandleFireRateTimerEnd, FireRate, false, FireRate);
 	}
 
