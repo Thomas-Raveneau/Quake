@@ -8,7 +8,7 @@
 
 
 // Weapon stats
-#define FIRE_RATE 1.0f
+#define FIRE_RATE 0.8f
 
 UCLASS()
 class QUAKE_API ARocketLauncher : public AWeapon

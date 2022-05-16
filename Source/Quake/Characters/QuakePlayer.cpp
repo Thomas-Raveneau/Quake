@@ -175,7 +175,6 @@ void AQuakePlayer::ServerSpawnProjectile_Implementation(FTransform ProjectileTra
 			FActorSpawnParameters spawnParams;
 			spawnParams.Owner = ProjectileOwner;
 
-
 			TArray<USkeletalMeshComponent*> SkeletalComps;
 
 			WeaponFP->GetComponents<USkeletalMeshComponent>(SkeletalComps);

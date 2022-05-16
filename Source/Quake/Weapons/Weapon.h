@@ -29,6 +29,8 @@ public:
 	// Default constructor
 	AWeapon();
 
+	virtual void BeginPlay() override;
+
 	// Called to configure class members replication
 	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty >& OutLifetimeProps) const override;
 
@@ -49,6 +51,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
 		void PlayFireSound();
+
+	UFUNCTION(BlueprintCallable, BlueprintImplementableEvent)
+		void PlayReloadSound();
 
 	UFUNCTION(BlueprintCallable)
 		virtual float GetFireRate() PURE_VIRTUAL_NUM(AWeapon::GetFireRate);

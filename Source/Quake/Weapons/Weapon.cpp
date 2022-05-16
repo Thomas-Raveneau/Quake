@@ -8,9 +8,16 @@
 // Sets default values
 AWeapon::AWeapon()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	CanShoot = true;
+}
+
+void AWeapon::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayReloadSound();
 }
 
 // Called to configure class members replication
@@ -19,7 +26,7 @@ void AWeapon::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeP
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(AWeapon, CanShoot);
-	
+
 }
 
 // Makes the weapon shoot
@@ -34,7 +41,7 @@ FTransform AWeapon::Shoot(FVector CameraForwardVector, FRotator CameraRotation)
 
 	const float FireRate = GetFireRate();
 
-	if (FireRate > 0) 
+	if (FireRate > 0)
 	{
 		CanShoot = false;
 		PlayFireSound();
@@ -64,19 +71,13 @@ FHitResult AWeapon::GetShootingTrajectory(FVector MuzzleLocation, FVector Camera
 	FVector MuzzleStart = MuzzleLocation;
 	FVector DirectVector = UKismetMathLibrary::GetDirectionUnitVector(MuzzleLocation, PlayerCamHit.ImpactPoint);
 	FVector MuzzleEnd = PlayerCamHit.ImpactPoint + (DirectVector * 2);
-	
 
 	GetWorld()->LineTraceSingleByChannel(MuzzleHit, MuzzleStart, MuzzleEnd, ECC_Visibility, TraceParams);
-
-	// Player cam debug line
-	//DrawDebugLine(GetWorld(), PlayerCamHit.TraceStart, PlayerCamHit.ImpactPoint, FColor::Orange, false, 2.0f);
-	// Muzzle debug line
-	//DrawDebugLine(GetWorld(), MuzzleHit.TraceStart, MuzzleHit.ImpactPoint, FColor::Red, true, 2.0f);
 
 	return MuzzleHit;
 }
 
 void AWeapon::HandleFireRateTimerEnd()
 {
-	CanShoot = true;
+	PlayReloadSound();
 }
