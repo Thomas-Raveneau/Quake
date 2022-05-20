@@ -149,8 +149,14 @@ void ADeathmatch::ServerEnablePlayerStart_Implementation(AActor* PlayerStart)
 // Called when Player character has died
 void ADeathmatch::PlayerDied(ACharacter* Character)
 {
+	AQuakePlayer* QuakePlayer = Cast<AQuakePlayer>(Character);
 	AActor* randomPlayerStart = GetRandomPlayerStart();
 	AController* CharacterController = Character->GetController();
+
+	if (QuakePlayer)
+	{
+		QuakePlayer->ServerDestroyLaser();
+	}
 
 	ServerDisablePlayerStart(randomPlayerStart);
 	RestartPlayerAtPlayerStart(CharacterController, randomPlayerStart);
