@@ -11,7 +11,7 @@
 #include "DeathmatchState.generated.h"
 
 // Game settings
-#define GAME_DURATION 300.0f
+#define GAME_DURATION 15.0f
 #define GAME_START_ANIMATION_DURATION 6.5f
 
 UCLASS()
@@ -25,6 +25,8 @@ public:
 		FTimerHandle GameTimerHandle;
 	UPROPERTY()
 		FTimerHandle GameStartTimerHandle;
+	UPROPERTY()
+		FTimerHandle GameEndTimerHandle;
 
 	UPROPERTY(BlueprintReadOnly)
 		float GameDuration = GAME_DURATION;
@@ -44,6 +46,12 @@ public:
 
 	UFUNCTION(Server, Reliable)
 		void ServerHandleGameEnd();
+
+	UFUNCTION()
+		APlayerState* GetGameWinner();
+
+	UFUNCTION(Server, Reliable)
+		void ServerTravelToLobby();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable)
 		void ServerSetPlayerReadyToPlay(AController* PlayerReady);

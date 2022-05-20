@@ -32,8 +32,54 @@ void ADeathmatchState::ServerHandleKill_Implementation(AController* Killer, ACon
 
 void ADeathmatchState::ServerHandleGameEnd_Implementation()
 {
-	GetWorld()->ServerTravel(TEXT("/Game/Levels/SessionLobby"));
+	APlayerState* GameWinner = GetGameWinner();
 
+	for (int i = 0; i != PlayerArray.Num(); i++)
+	{
+		//ADeathmatchPlayerState* PlayerState
+		AQuakePlayer* PlayerPawn = Cast<AQuakePlayer>(PlayerArray[i]->GetPawn());
+
+		if (PlayerPawn)
+		{
+			if (PlayerArray[i] == GameWinner)
+			{
+				PlayerPawn->EndGame(true);
+			}
+			else 
+			{
+				PlayerPawn->EndGame(false);
+			}
+		}
+	}
+
+	GetWorldTimerManager().SetTimer(GameEndTimerHandle, this, &ADeathmatchState::ServerTravelToLobby, 5, false, 5);
+}
+
+APlayerState* ADeathmatchState::GetGameWinner()
+{
+	APlayerState* GameWinner = nullptr;
+	int GameWinnerMaxKill = -1;
+
+	for (int i = 0; i != PlayerArray.Num(); i++)
+	{
+		ADeathmatchPlayerState* PlayerState = Cast<ADeathmatchPlayerState>(PlayerArray[i]);
+		
+		if (PlayerState)
+		{
+			if (PlayerState->killCount > GameWinnerMaxKill)
+			{
+				GameWinner = PlayerArray[i];
+				GameWinnerMaxKill = PlayerState->killCount;
+			}
+		}
+	}
+
+	return GameWinner;
+}
+
+void ADeathmatchState::ServerTravelToLobby_Implementation()
+{
+	GetWorld()->ServerTravel(TEXT("/Game/Levels/SessionLobby"));
 }
 
 void ADeathmatchState::ServerSetPlayerReadyToPlay_Implementation(AController* PlayerReady)

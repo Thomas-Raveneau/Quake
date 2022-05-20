@@ -145,6 +145,9 @@ public:
 		void StartGame(float GameDuration);
 
 	UFUNCTION(BlueprintImplementableEvent)
+		void EndGame(bool IsWinner);
+
+	UFUNCTION(BlueprintImplementableEvent)
 		void PlayJumpSound();
 
 protected:
