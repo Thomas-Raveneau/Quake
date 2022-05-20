@@ -12,6 +12,7 @@
 
 // Game settings
 #define GAME_DURATION 300.0f
+#define GAME_START_ANIMATION_DURATION 6.5f
 
 UCLASS()
 class QUAKE_API ADeathmatchState : public AGameStateBase
