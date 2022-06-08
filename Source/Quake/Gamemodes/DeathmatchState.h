@@ -11,7 +11,7 @@
 #include "DeathmatchState.generated.h"
 
 // Game settings
-#define GAME_DURATION 15.0f
+#define GAME_DURATION 150.0f
 #define GAME_START_ANIMATION_DURATION 6.5f
 
 UCLASS()

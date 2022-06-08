@@ -8,6 +8,27 @@ APlayerGameController::APlayerGameController()
 
 }
 
+void APlayerGameController::HandleMenuOpeningAndClosing(bool MenuOpening)
+{
+	if (!MenuOpening) {
+		IsMenuOpened = false;
+
+		FInputModeGameOnly InputMode;
+
+		SetInputMode(InputMode);
+		SetShowMouseCursor(false);
+	}
+	else
+	{
+		IsMenuOpened = true;
+
+		FInputModeUIOnly InputMode;
+
+		SetInputMode(InputMode);
+		SetShowMouseCursor(true);
+	}
+}
+
 void APlayerGameController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -32,8 +53,7 @@ void APlayerGameController::SetupInputComponent()
 
 void APlayerGameController::Tick(float DeltaSeconds)
 {
-	return;
-	if (IsWindowFocused) {
+	if (IsWindowFocused && !IsMenuOpened) {
 		int x = 0;
 		int y = 0;
 

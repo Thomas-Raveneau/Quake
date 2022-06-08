@@ -18,9 +18,16 @@ public:
 	UPROPERTY()
 		bool IsWindowFocused = false;
 
+private:
+	UPROPERTY()
+		bool IsMenuOpened = false;
+
 public:
 	APlayerGameController();
 	virtual ~APlayerGameController() = default;
+
+	UFUNCTION(BlueprintCallable)
+		void HandleMenuOpeningAndClosing(bool MenuOpening);
 
 protected:
 	virtual void BeginPlay() override;
