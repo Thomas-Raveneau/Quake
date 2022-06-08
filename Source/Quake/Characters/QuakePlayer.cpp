@@ -24,8 +24,6 @@ void AQuakePlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &AQuakePlayer::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &AQuakePlayer::MoveRight);
-	PlayerInputComponent->BindAxis(TEXT("Turn"), this, &AQuakePlayer::Turn);
-	PlayerInputComponent->BindAxis(TEXT("LookUp"), this, &AQuakePlayer::LookUp);
 
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AQuakePlayer::JumpStart);
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Released, this, &AQuakePlayer::JumpStop);
